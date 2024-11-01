@@ -19,9 +19,13 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		title := r.FormValue("title")
 		content := r.FormValue("content")
-
-		if title != "" && content != "" {
-			if err := database.InsertPost(title, content); err != nil {
+		 cookie, err := r.Cookie("session")
+		 if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+			if title != "" && content != "" {
+			if err := database.InsertPost(title, content,cookie.Value); err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
@@ -50,6 +54,12 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+		
+		cookie := http.Cookie{
+		Name: "session",	
+        Value:    email,
+    }
+    http.SetCookie(w, &cookie)
 		RenderTemplate(w, "./assets/templates/post.html", posts)
 	} else {
 		errorMessage := ""

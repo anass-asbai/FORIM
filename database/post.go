@@ -1,6 +1,7 @@
 package database
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -14,8 +15,12 @@ type Post struct {
 	User    string
 }
 
-func InsertPost(title, content string) error {
-	_, err := db.Exec("INSERT INTO posts (title, content, createdAt) VALUES (?, ?, datetime('now'))", title, content)
+func InsertPost(title, content,email string) error {
+	id := 0
+	erre := db.QueryRow("SELECT user_id FROM users WHERE email = ?",email).Scan(&id)
+_ = erre
+	fmt.Println(id)
+	_, err := db.Exec("INSERT INTO posts (title, content, createdAt,user_id) VALUES (?, ?, datetime('now'),?)", title, content,id)
 	return err
 }
 

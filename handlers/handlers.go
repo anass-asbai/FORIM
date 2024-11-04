@@ -14,7 +14,16 @@ func GetHome(w http.ResponseWriter, r *http.Request) {
 	}
 	id_post := r.FormValue("id-post")
 	comment := r.FormValue("comment")
-	if err := database.Createcomment(comment, id_post); err != nil {
+	cookie, err := r.Cookie("session")
+		if err != nil {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+			return
+		}
+		if cookie == nil{
+			http.Redirect(w, r, "/", http.StatusSeeOther)
+			return
+		}
+	if err := database.Createcomment(comment, id_post,cookie.Value); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

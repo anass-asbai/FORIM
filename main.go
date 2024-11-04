@@ -1,10 +1,11 @@
 package main
 
 import (
-	"forim/database"
-	"forim/handlers"
 	"log"
 	"net/http"
+
+	"forim/database"
+	"forim/handlers"
 )
 
 func main() {
@@ -29,6 +30,7 @@ func routes() http.Handler {
 	mux.HandleFunc("/", handlers.Login)
 	mux.HandleFunc("/register", handlers.Register)
 	mux.HandleFunc("/post", handlers.GetHome)
+	mux.HandleFunc("/comment", handlers.GetComment)
 	mux.HandleFunc("/post/create", handlers.CreatePost)
 	return mux
 }

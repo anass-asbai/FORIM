@@ -8,7 +8,8 @@ import (
 )
 
 func GetHome(w http.ResponseWriter, r *http.Request) {
-	posts, err := database.GetPosts()
+	catigorie := r.FormValue("category")
+	posts, err := database.GetPosts(catigorie)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -77,7 +78,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if doz == true {
-		posts, err := database.GetPosts()
+		catigorie := r.FormValue("category")
+		posts, err := database.GetPosts(catigorie)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

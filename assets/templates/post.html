@@ -148,7 +148,20 @@
     </style>
 </head>
 <body>
+    <form action="/post" method="post">
+        <label for="category">Select Category:</label>
+        <select id="category" name="category" >
+            <option value="" disabled selected>All</option>
+            <option value="tech">Technology</option>
+            <option value="life">Lifestyle</option>
+            <option value="health">Health</option>
+            <option value="sports">Sports</option>
+            <option value="travel">Travel</option>
+        </select>
+        <button>Filter</button>
+    </form>
     <form action="/post/create" method="post">
+       
         <button>Create Post</button>
     </form>
     <h1>Posts</h1>

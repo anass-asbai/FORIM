@@ -40,15 +40,21 @@ func InsertComment(comment,email string) error{
 	return err
 }*/
 
-func GetPosts() ([]Post, error) {
-	rows, err := db.Query(`SELECT posts.post_id, posts.title, posts.content, posts.createdAt, 
-       COALESCE(likes.count, 0) AS count,COALESCE(users.name,'') AS username,
-	   categories.name  AS category
-       FROM posts 
-       LEFT JOIN likes ON likes.post_id = posts.post_id 
-	   LEFT JOIN users ON users.user_id=posts.user_id
-	   LEFT JOIN categories ON categories.category_id=posts.category_id
-	   ORDER BY likes.count DESC;`)
+func GetPosts(catigorie string) ([]Post, error) {
+	var query string
+	query = `SELECT posts.post_id, posts.title, posts.content, posts.createdAt, 
+         COALESCE(likes.count, 0) AS count, COALESCE(users.name, '') AS username,
+         categories.name AS category
+         FROM posts 
+         LEFT JOIN likes ON likes.post_id = posts.post_id 
+         LEFT JOIN users ON users.user_id = posts.user_id
+         LEFT JOIN categories ON categories.category_id = posts.category_id`
+
+	if catigorie != "" {
+		query += " WHERE categories.name = ?"
+	}
+	query += " ORDER BY likes.count DESC;"
+	rows, err := db.Query(query, catigorie)
 	if err != nil {
 		return nil, err
 	}

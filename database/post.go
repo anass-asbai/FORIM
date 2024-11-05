@@ -1,16 +1,18 @@
 package database
 
 import (
+	"fmt"
 	"time"
 )
 
 type Post struct {
-	ID      int
-	Title   string
-	Content string
-	Date    time.Time
-	Like    int
-	User    string
+	ID       int
+	Title    string
+	Content  string
+	Date     time.Time
+	Like     int
+	User     string
+	Category string
 }
 type Comment struct {
 	ID      int
@@ -19,12 +21,15 @@ type Comment struct {
 	User    string
 }
 
-func InsertPost(title, content, email string) error {
+func InsertPost(title, content, email, categories string) error {
 	id := 0
+	category_id := 0
 	erre := db.QueryRow("SELECT user_id FROM users WHERE email = ?", email).Scan(&id)
 	_ = erre
-
-	_, err := db.Exec("INSERT INTO posts (title, content, createdAt,user_id) VALUES (?, ?, datetime('now'),?)", title, content, id)
+	erre = db.QueryRow("SELECT category_id FROM categories WHERE name = ?", categories).Scan(&category_id)
+	fmt.Println(categories)
+	_ = erre
+	_, err := db.Exec("INSERT INTO posts (title, content, createdAt,user_id, category_id) VALUES (?, ?, datetime('now'),?,?)", title, content, id, category_id)
 	return err
 }
 
@@ -37,10 +42,13 @@ func InsertComment(comment,email string) error{
 
 func GetPosts() ([]Post, error) {
 	rows, err := db.Query(`SELECT posts.post_id, posts.title, posts.content, posts.createdAt, 
-       COALESCE(likes.count, 0) AS count,COALESCE(users.name,'') AS username
+       COALESCE(likes.count, 0) AS count,COALESCE(users.name,'') AS username,
+	   categories.name  AS category
        FROM posts 
        LEFT JOIN likes ON likes.post_id = posts.post_id 
-	   LEFT JOIN users ON users.user_id=posts.user_id;`)
+	   LEFT JOIN users ON users.user_id=posts.user_id
+	   LEFT JOIN categories ON categories.category_id=posts.category_id
+	   ORDER BY likes.count DESC;`)
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +56,7 @@ func GetPosts() ([]Post, error) {
 	var posts []Post
 	for rows.Next() {
 		var post Post
-		if err := rows.Scan(&post.ID, &post.Title, &post.Content, &post.Date, &post.Like, &post.User); err != nil {
+		if err := rows.Scan(&post.ID, &post.Title, &post.Content, &post.Date, &post.Like, &post.User, &post.Category); err != nil {
 			return nil, err
 		}
 		posts = append(posts, post)

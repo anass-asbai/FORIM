@@ -35,13 +35,15 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		title := r.FormValue("title")
 		content := r.FormValue("content")
+		category := r.FormValue("category")
+
 		cookie, err := r.Cookie("session")
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		if title != "" && content != "" {
-			if err := database.InsertPost(title, content, cookie.Value); err != nil {
+		if title != "" && content != "" && category != "" {
+			if err := database.InsertPost(title, content, cookie.Value, category); err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}

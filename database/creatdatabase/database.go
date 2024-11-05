@@ -44,11 +44,14 @@ func main() {
 	);
 
 	CREATE TABLE IF NOT EXISTS comments (
-		comment_id INTEGER PRIMARY KEY AUTOINCREMENT,
-		post_id INTEGER,
-		content TEXT NOT NULL,
-		FOREIGN KEY (post_id) REFERENCES posts(post_id) ON DELETE CASCADE
-	);
+    comment_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    post_id INTEGER,
+    user_id INTEGER, 
+    content TEXT NOT NULL,
+    FOREIGN KEY (post_id) REFERENCES posts(post_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE  
+    );
+
 
 	CREATE TABLE IF NOT EXISTS likes (
 		like_id INTEGER PRIMARY KEY AUTOINCREMENT,

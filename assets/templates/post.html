@@ -158,14 +158,16 @@
                         <span class="like-count">{{ .Like }} Likes</span>
                     </div>
                     <div>
-                        <button class="like-comment-btn">Comment</button>
-                        <span class="comment-count">{{ .Comment }} Comments</span>
+                        <form action="/comment" method="post">
+
+                        <button class="like-comment-btn"  name="id-post" value="{{ .ID }}">Comment</button>
+                        </form>
                     </div>
                 </div>
 
-                <form class="comment-form" action="/post/{{.ID}}/comment" method="post">
+                <form class="comment-form" action="/post" method="post">
                     <input type="text" name="comment" placeholder="Add a comment..." required>
-                    <button type="submit">Comment</button>
+                    <button type="submit" value="{{ .ID }}" name="id-post">Comment</button>
                 </form>
             </li>
         {{ end }}

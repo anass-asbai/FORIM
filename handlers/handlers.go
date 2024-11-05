@@ -1,8 +1,10 @@
 package handlers
 
 import (
-	"forim/database"
 	"net/http"
+
+	"forim/bcryptp"
+	"forim/database"
 )
 
 func GetHome(w http.ResponseWriter, r *http.Request) {
@@ -11,7 +13,21 @@ func GetHome(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
+	id_post := r.FormValue("id-post")
+	comment := r.FormValue("comment")
+	cookie, err := r.Cookie("session")
+	if err != nil {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+	if cookie == nil {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+	if err := database.Createcomment(comment, id_post, cookie.Value); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	RenderTemplate(w, "./assets/templates/post.html", posts)
 }
 
@@ -19,9 +35,13 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		title := r.FormValue("title")
 		content := r.FormValue("content")
-
+		cookie, err := r.Cookie("session")
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 		if title != "" && content != "" {
-			if err := database.InsertPost(title, content); err != nil {
+			if err := database.InsertPost(title, content, cookie.Value); err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
@@ -31,6 +51,16 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	RenderTemplate(w, "./assets/templates/post.create.page.html", nil)
+}
+
+func GetComment(w http.ResponseWriter, r *http.Request) {
+	id_post := r.FormValue("id-post")
+	comments, err := database.GetComment(id_post)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	RenderTemplate(w, "./assets/templates/comment.html", comments)
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
@@ -50,6 +80,12 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+
+		cookie := http.Cookie{
+			Name:  "session",
+			Value: email,
+		}
+		http.SetCookie(w, &cookie)
 		RenderTemplate(w, "./assets/templates/post.html", posts)
 	} else {
 		errorMessage := ""
@@ -65,12 +101,16 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		email := r.FormValue("email")
 		password := r.FormValue("password")
 		name := r.FormValue("username")
-
-		if email == "" || password == "" || name == "" {
+		p, err := bcryptp.HashPassword(password)
+		if email == "" || p == "" || name == "" {
 			RenderTemplate(w, "./assets/templates/register.html", nil)
 			return
 		}
-		if err := database.CreateAcount(name, email, password); err != nil {
+		if err != nil {
+			RenderTemplate(w, "./assets/templates/register.html", nil)
+			return
+		}
+		if err := database.CreateAcount(name, email, p); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}

@@ -58,7 +58,7 @@ func GetPosts() ([]Post, error) {
 }
 
 func GetComment(id string) ([]Comment, error) {
-	rows, err := db.Query(`SELECT content, users.name FROM comments INNER JOIN users ON users.user_id=comments.name WHERE  post_id = ?`, id)
+	rows, err := db.Query(`SELECT content, users.name FROM comments INNER JOIN users ON users.user_id=comments.user_id WHERE  post_id = ?`, id)
 	if err != nil {
 		return nil, err
 	}

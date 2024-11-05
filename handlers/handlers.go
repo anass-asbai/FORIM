@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 
+	"forim/bcryptp"
 	"forim/database"
 )
 
@@ -15,15 +16,15 @@ func GetHome(w http.ResponseWriter, r *http.Request) {
 	id_post := r.FormValue("id-post")
 	comment := r.FormValue("comment")
 	cookie, err := r.Cookie("session")
-		if err != nil {
+	if err != nil {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
-			return
-		}
-		if cookie == nil{
-			http.Redirect(w, r, "/", http.StatusSeeOther)
-			return
-		}
-	if err := database.Createcomment(comment, id_post,cookie.Value); err != nil {
+		return
+	}
+	if cookie == nil {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+	if err := database.Createcomment(comment, id_post, cookie.Value); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -100,12 +101,16 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		email := r.FormValue("email")
 		password := r.FormValue("password")
 		name := r.FormValue("username")
-
-		if email == "" || password == "" || name == "" {
+		p, err := bcryptp.HashPassword(password)
+		if email == "" || p == "" || name == "" {
 			RenderTemplate(w, "./assets/templates/register.html", nil)
 			return
 		}
-		if err := database.CreateAcount(name, email, password); err != nil {
+		if err != nil {
+			RenderTemplate(w, "./assets/templates/register.html", nil)
+			return
+		}
+		if err := database.CreateAcount(name, email, p); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}

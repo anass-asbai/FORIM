@@ -12,6 +12,6 @@ func Createcomment(comment, post_id,email string) error {
 	erre := db.QueryRow("SELECT user_id FROM users WHERE email = ?", email).Scan(&id)
 	_ = erre
 	fmt.Print(comment)
-	_, err := db.Exec("INSERT INTO comments (post_id,content,name) VALUES ($1,$2,$3)", post_id, comment,id)
+	_, err := db.Exec("INSERT INTO comments (post_id,content,user_id) VALUES ($1,$2,$3)", post_id, comment,id)
 	return err
 }

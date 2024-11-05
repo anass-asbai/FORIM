@@ -69,125 +69,57 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Insert sample data for users
-	userStmt, err := data.Prepare(`INSERT INTO users (name, email, password) VALUES (?, ?, ?);`)
+	// Insert sample data
+	_, err = data.Exec(`
+		INSERT INTO users (name, email, password) VALUES
+		('Alice', 'alice@example.com', 'password123'),
+		('Bob', 'bob@example.com', 'password123'),
+		('Charlie', 'charlie@example.com', 'password123');
+	`)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer userStmt.Close()
 
-	users := []struct {
-		name     string
-		email    string
-		password string
-	}{
-		{"Alice", "alice@example.com", "password123"},
-		{"Bob", "bob@example.com", "password123"},
-		{"Charlie", "charlie@example.com", "password123"},
-		{"Diana", "diana@example.com", "password123"},
-	}
-
-	for _, user := range users {
-		_, err = userStmt.Exec(user.name, user.email, user.password)
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
-
-	// Insert sample data for posts
-	postStmt, err := data.Prepare(`INSERT INTO posts (post_id, title, content, createdAt, user_id) VALUES (?, ?, ?, ?, ?);`)
+	_, err = data.Exec(`
+		INSERT INTO posts (title, content, createdAt, user_id) VALUES
+		('First Post', 'This is the content of the first post.', '2024-11-01 12:00:00', 1),
+		('Second Post', 'This is the content of the second post.', '2024-11-02 12:00:00', 2),
+		('Third Post', 'This is the content of the third post.', '2024-11-03 12:00:00', 3);
+	`)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer postStmt.Close()
 
-	posts := []struct {
-		postID    int
-		title     string
-		content   string
-		createdAt time.Time
-		userID    int
-	}{
-		{1, "Premier Post", "Ceci est le contenu du premier post.", parseDate("2024-10-25 10:00:00"), 1},
-		{2, "Deuxième Post", "Ceci est le contenu du deuxième post.", parseDate("2024-10-25 11:00:00"), 2},
-		{3, "Troisième Post", "Ceci est le contenu du troisième post.", parseDate("2024-10-25 12:00:00"), 3},
-	}
-
-	for _, post := range posts {
-		_, err = postStmt.Exec(post.postID, post.title, post.content, post.createdAt, post.userID)
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
-
-	// Insert sample data for comments
-	commentStmt, err := data.Prepare(`INSERT INTO comments (post_id, content) VALUES (?, ?);`)
+	_, err = data.Exec(`
+		INSERT INTO comments (post_id, user_id, content) VALUES
+		(1, 2, 'Great post!'),
+		(1, 3, 'Thanks for sharing.'),
+		(2, 1, 'Interesting perspective.');
+	`)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer commentStmt.Close()
 
-	comments := []struct {
-		postID  int
-		content string
-	}{
-		{1, "Premier commentaire sur le premier post."},
-		{1, "Deuxième commentaire sur le premier post."},
-		{2, "Commentaire sur le deuxième post."},
-	}
-
-	for _, comment := range comments {
-		_, err = commentStmt.Exec(comment.postID, comment.content)
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
-
-	// Insert sample data for likes
-	likeStmt, err := data.Prepare(`INSERT INTO likes (post_id, count) VALUES (?, ?);`)
+	_, err = data.Exec(`
+		INSERT INTO likes (post_id, count) VALUES
+		(1, 5),
+		(2, 3),
+		(3, 10);
+	`)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer likeStmt.Close()
 
-	likes := []struct {
-		postID int
-		count  int
-	}{
-		{1, 10},
-		{2, 5},
-		{3, 8},
-	}
-
-	for _, like := range likes {
-		_, err = likeStmt.Exec(like.postID, like.count)
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
-
-	// Insert sample data for categories
-	categoryStmt, err := data.Prepare(`INSERT INTO categories (name) VALUES (?);`)
+	_, err = data.Exec(`
+		INSERT INTO categories (name) VALUES
+		('Technology'),
+		('Lifestyle'),
+		('Education');
+	`)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer categoryStmt.Close()
 
-	categories := []struct {
-		name string
-	}{
-		{"Technology"},
-		{"Health"},
-		{"Education"},
-		{"Travel"},
-	}
+	fmt.Println("Données test insérées avec succès.")
 
-	for _, category := range categories {
-		_, err = categoryStmt.Exec(category.name)
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
-
-	log.Println("Sample data inserted successfully!")
 }

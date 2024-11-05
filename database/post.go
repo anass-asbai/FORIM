@@ -1,7 +1,6 @@
 package database
 
 import (
-	"fmt"
 	"time"
 )
 
@@ -24,7 +23,7 @@ func InsertPost(title, content, email string) error {
 	id := 0
 	erre := db.QueryRow("SELECT user_id FROM users WHERE email = ?", email).Scan(&id)
 	_ = erre
-	fmt.Println(id)
+
 	_, err := db.Exec("INSERT INTO posts (title, content, createdAt,user_id) VALUES (?, ?, datetime('now'),?)", title, content, id)
 	return err
 }
@@ -58,18 +57,19 @@ func GetPosts() ([]Post, error) {
 }
 
 func GetComment(id string) ([]Comment, error) {
-	rows, err := db.Query(`SELECT content, users.name FROM comments INNER JOIN users ON users.user_id=comments.name WHERE  post_id = ?`, id)
+	rows, err := db.Query(`SELECT content, users.name FROM comments LEFT Join users ON users.user_id=comments.user_id WHERE  post_id = ?`, id)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 	var Comments []Comment
 	for rows.Next() {
+
 		var Comment Comment
 		if err := rows.Scan(&Comment.Comment, &Comment.User); err != nil {
 			return nil, err
 		}
-		fmt.Println(rows.Next())
+
 		Comments = append(Comments, Comment)
 	}
 	return Comments, nil

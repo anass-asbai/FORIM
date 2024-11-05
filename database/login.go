@@ -3,18 +3,18 @@ package database
 import "forim/bcryptp"
 
 func GetLogin(email, password string) (bool, error) {
-	rows, err := db.Query("SELECT email,password FROM users")
+	rows, err := db.Query("SELECT password FROM users WHERE email =  $1", email)
 	if err != nil {
 		return false, err
 	}
 	defer rows.Close()
 	for rows.Next() {
-		var emails string
+
 		var passwords string
-		if err := rows.Scan(&emails, &passwords); err != nil {
+		if err := rows.Scan(&passwords); err != nil {
 			return false, err
 		}
-		if emails == email && bcryptp.CheckPasswordHash(password, passwords) {
+		if bcryptp.CheckPasswordHash(password, passwords) {
 			return true, nil
 		}
 

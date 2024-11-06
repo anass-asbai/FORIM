@@ -55,7 +55,6 @@ func main() {
 		post_id INTEGER,
 		count INTEGER NOT NULL DEFAULT 0,
 		FOREIGN KEY (post_id) REFERENCES posts(post_id) ON DELETE CASCADE
-		
 	);
 	`)
 	if err != nil {

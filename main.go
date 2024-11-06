@@ -32,5 +32,6 @@ func routes() http.Handler {
 	mux.HandleFunc("/post", handlers.GetHome)
 	mux.HandleFunc("/comment", handlers.GetComment)
 	mux.HandleFunc("/post/create", handlers.CreatePost)
+//	mux.HandleFunc("POST /like_post", handlers.Like_post)
 	return mux
 }

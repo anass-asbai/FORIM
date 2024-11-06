@@ -161,6 +161,7 @@
         </select>
         <button>Filter</button>
     </form>
+    <button onclick="deleteCookie()">logout</button>
     <form action="/post/create" method="post">
        
         <button>Create Post</button>
@@ -176,7 +177,9 @@
                 <div>{{ .Date }}</div>
                 <div class="interaction-section">
                     <div>
-                        <button class="like-comment-btn">Like</button>
+                        <form action="/like_post" method="post">
+                            <button class="like-comment-btn" name="like_post" value="{{ .ID }}">Like</button>
+                        </form>
                         <span class="like-count">{{ .Like }} Likes</span>
                     </div>
                     <div>
@@ -194,4 +197,10 @@
         {{ end }}
     </ul>
 </body>
+<script>
+    function deleteCookie() {
+    document.cookie = `session=; expires=Thu, 01 Jan 2000 00:00:00 UTC;`;
+    window.location.href = "/"; 
+}
+</script>
 </html>

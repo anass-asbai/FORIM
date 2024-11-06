@@ -88,3 +88,6 @@ func GetComment(id string) ([]Comment, error) {
 	}
 	return Comments, nil
 }
+/*func GetLike(id string) error{
+	rows, err := db.QueryRow('SELECT')
+}*/

@@ -51,7 +51,7 @@ func GetPosts(catigorie string) ([]Post, error) {
          LEFT JOIN categories ON categories.category_id = posts.category_id`
 
 	if catigorie != "" {
-		query += " WHERE categories.name = ?"
+		query += " WHERE category = ?"
 	}
 	query += " ORDER BY likes.count DESC;"
 	rows, err := db.Query(query, catigorie)

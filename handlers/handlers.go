@@ -25,9 +25,11 @@ func GetHome(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
-	if err := database.Createcomment(comment, id_post, cookie.Value); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+	if comment != "" {
+		if err := database.Createcomment(comment, id_post, cookie.Value); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 	}
 	RenderTemplate(w, "./assets/templates/post.html", posts)
 }

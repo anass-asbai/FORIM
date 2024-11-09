@@ -22,6 +22,13 @@ type Comment struct {
 }
 
 func InsertPost(title, content, email, categories string) error {
+	/* if(len(content)> 500){
+
+		return <max len error>
+
+	}
+	*/
+
 	id := 0
 	category_id := 0
 	erre := db.QueryRow("SELECT user_id FROM users WHERE email = ?", email).Scan(&id)
@@ -42,18 +49,22 @@ func InsertComment(comment,email string) error{
 
 func GetPosts(catigorie string) ([]Post, error) {
 	var query string
-	query = `SELECT posts.post_id, posts.title, posts.content, posts.createdAt, 
-         COALESCE(likes.count, 0) AS count, COALESCE(users.name, '') AS username,
+	query = `SELECT posts.post_id,
+	 posts.title,
+	  posts.content,
+	   posts.createdAt, 
+       COUNT(CASE WHEN likes.post_id = posts.post_id THEN 1 ELSE NULL END),
+		  COALESCE(users.name, '') AS username,
          categories.name AS category
          FROM posts 
-         LEFT JOIN likes ON likes.post_id = posts.post_id 
+		 LEFT JOIN likes ON likes.post_id = posts.post_id
          LEFT JOIN users ON users.user_id = posts.user_id
          LEFT JOIN categories ON categories.category_id = posts.category_id`
 
 	if catigorie != "" {
 		query += " WHERE category = ?"
 	}
-	query += " ORDER BY likes.count DESC;"
+	query += " ORDER BY likes.post_id DESC;"
 	rows, err := db.Query(query, catigorie)
 	if err != nil {
 		return nil, err
@@ -62,9 +73,19 @@ func GetPosts(catigorie string) ([]Post, error) {
 	var posts []Post
 	for rows.Next() {
 		var post Post
+
 		if err := rows.Scan(&post.ID, &post.Title, &post.Content, &post.Date, &post.Like, &post.User, &post.Category); err != nil {
 			return nil, err
 		}
+		/*rows1, err := db.Query(`SELECT COUNT(likes.post_id) FROM likes WHERE likes.post_id = ?`, post.ID)
+		if err != nil {
+			return nil, err
+		}
+		if rows1.Next() {
+			rows1.Scan(&post.Like)
+			fmt.Println(post.Like)
+		}
+		*/
 		posts = append(posts, post)
 	}
 	return posts, nil
@@ -88,6 +109,18 @@ func GetComment(id string) ([]Comment, error) {
 	}
 	return Comments, nil
 }
-/*func GetLike(id string) error{
-	rows, err := db.QueryRow('SELECT')
-}*/
+
+func InsertLike(id, user_id string) error {
+	check := 1
+	db.QueryRow("SELECT user_id FROM users WHERE email = ?", user_id).Scan(&check)
+	if check != 1 {
+		id_user := 0
+		erre := db.QueryRow("SELECT user_id FROM users WHERE email = ?", user_id).Scan(&id_user)
+		_ = erre
+		_, err := db.Exec(`INSERT INTO likes (post_id,user_id,is_like,type) VALUES (?,?,?,'post')`, id, id_user, 1)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}

@@ -53,8 +53,12 @@ func main() {
 	CREATE TABLE IF NOT EXISTS likes (
 		like_id INTEGER PRIMARY KEY AUTOINCREMENT,
 		post_id INTEGER,
+		user_id INTEGER,
 		count INTEGER NOT NULL DEFAULT 0,
-		FOREIGN KEY (post_id) REFERENCES posts(post_id) ON DELETE CASCADE
+		is_like INTEGER,
+		type TEXT,
+		FOREIGN KEY (post_id) REFERENCES posts(post_id) ON DELETE CASCADE,
+		FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE  
 	);
 	`)
 	if err != nil {

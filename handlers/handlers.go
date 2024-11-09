@@ -68,15 +68,19 @@ func GetComment(w http.ResponseWriter, r *http.Request) {
 	RenderTemplate(w, "./assets/templates/comment.html", comments)
 }
 
-/*func Like_post(w http.ResponseWriter, r *http.Request) {
+func Like_post(w http.ResponseWriter, r *http.Request) {
 	like := r.FormValue("like_post")
-	like_post, err := database.GetLike(like)
+	cookie, err := r.Cookie("session")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	fmt.Println(r.FormValue("like_post"))
-}*/
+	err = database.InsertLike(like, cookie.Value)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
 
 func Login(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
@@ -98,8 +102,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		}
 
 		cookie := http.Cookie{
-			Name:   "session",
-			Value:  email,
+			Name:  "session",
+			Value: email,
 		}
 		http.SetCookie(w, &cookie)
 		RenderTemplate(w, "./assets/templates/post.html", posts)

@@ -54,7 +54,6 @@ func main() {
 		like_id INTEGER PRIMARY KEY AUTOINCREMENT,
 		post_id INTEGER,
 		user_id INTEGER,
-		count INTEGER NOT NULL DEFAULT 0,
 		is_like INTEGER,
 		type TEXT,
 		FOREIGN KEY (post_id) REFERENCES posts(post_id) ON DELETE CASCADE,

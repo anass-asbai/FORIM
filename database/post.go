@@ -83,7 +83,6 @@ func GetPosts(catigorie string) ([]Post, error) {
 		defer rows1.Close()
 		if rows1.Next() {
 			rows1.Scan(&post.Like)
-			fmt.Println(post.Like)
 		}
 
 		posts = append(posts, post)
@@ -112,14 +111,33 @@ func GetComment(id string) ([]Comment, error) {
 
 func InsertLike(id, email string) error {
 	var id_user int
+	var checkrow int
 	err := db.QueryRow("SELECT user_id FROM users WHERE email = ?", email).Scan(&id_user)
 	if err != nil {
 		return err
 	}
-	if _, err := db.Exec(`INSERT INTO likes (post_id,user_id,is_like,type) VALUES (?,?,?,'post')`, id, id_user, 1); err != nil {
-		fmt.Println("TEST", err.Error())
+	pre,err := db.Prepare("SELECT COUNT(like_id) FROM likes WHERE post_id = ? AND user_id = ? ")
+	if err != nil {
+		fmt.Println(err.Error())
 		return err
 	}
+	defer pre.Close()
+	err = pre.QueryRow(id, id_user).Scan(&checkrow)
+if err != nil {
+    fmt.Println(err.Error())
+    return err
+}
+	if checkrow != 0 {
+			if _, err := db.Exec(`DELETE FROM Likes WHERE post_id = ? AND user_id = ? `, id, id_user); err != nil {
+		fmt.Println(err.Error())
+		return err
+		}
+	}else{
+		if _, err = db.Exec(`INSERT INTO likes (post_id,user_id,is_like,type) VALUES (?,?,?,'post')`, id, id_user, 1); err != nil {
+			fmt.Println(err.Error())
+			return err
+		}
 
+	}
 	return nil
 }

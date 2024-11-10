@@ -70,16 +70,26 @@ func GetComment(w http.ResponseWriter, r *http.Request) {
 
 func Like_post(w http.ResponseWriter, r *http.Request) {
 	like := r.FormValue("like_post")
+	deslike := r.FormValue("deslike_post")
 	cookie, err := r.Cookie("session")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = database.InsertLike(like, cookie.Value)
-	if err != nil {
+	if like != "" {
+		err = database.InsertLike(like, cookie.Value, true)
+		if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	}else {
+		err = database.InsertLike(deslike, cookie.Value,false)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+
 	http.Redirect(w,r,"/post",http.StatusSeeOther)
 }
 

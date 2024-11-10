@@ -179,8 +179,10 @@
                     <div>
                         <form action="/like_post" method="post">
                             <button class="like-comment-btn" name="like_post" value="{{ .ID }}">Like</button>
+                            <button class="like-comment-btn" name="deslike_post" value="{{ .ID }}">Deslike</button>
                         </form>
                         <span class="like-count">{{ .Like }} Likes</span>
+                        <span class="like-count">{{ .Deslike }} Likes</span>
                     </div>
                     <div>
                         <form action="/comment" method="post">

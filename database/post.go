@@ -11,6 +11,7 @@ type Post struct {
 	Content  string
 	Date     time.Time
 	Like     int
+	Deslike  int
 	User     string
 	Category string
 }
@@ -76,13 +77,21 @@ func GetPosts(catigorie string) ([]Post, error) {
 		if err := rows.Scan(&post.ID, &post.Title, &post.Content, &post.Date /*&post.Like,*/, &post.User, &post.Category); err != nil {
 			return nil, err
 		}
-		rows1, err := db.Query(`SELECT COUNT(likes.post_id) FROM likes WHERE likes.post_id = ?`, post.ID)
+		rows1, err := db.Query(`SELECT COUNT(likes.post_id) FROM likes WHERE likes.post_id = ? AND is_like = 1`, post.ID)
 		if err != nil {
 			return nil, err
 		}
 		defer rows1.Close()
 		if rows1.Next() {
 			rows1.Scan(&post.Like)
+		}
+			rows2, err := db.Query(`SELECT COUNT(likes.post_id) FROM likes WHERE likes.post_id = ? AND is_like = 2`, post.ID)
+		if err != nil {
+			return nil, err
+		}
+		defer rows2.Close()
+		if rows2.Next() {
+			rows2.Scan(&post.Deslike)
 		}
 
 		posts = append(posts, post)
@@ -109,7 +118,7 @@ func GetComment(id string) ([]Comment, error) {
 	return Comments, nil
 }
 
-func InsertLike(id, email string) error {
+func InsertLike(id, email string,is_like bool) error {
 	var id_user int
 	var checkrow int
 	err := db.QueryRow("SELECT user_id FROM users WHERE email = ?", email).Scan(&id_user)
@@ -127,17 +136,65 @@ if err != nil {
     fmt.Println(err.Error())
     return err
 }
-	if checkrow != 0 {
-			if _, err := db.Exec(`DELETE FROM Likes WHERE post_id = ? AND user_id = ? `, id, id_user); err != nil {
-		fmt.Println(err.Error())
-		return err
-		}
-	}else{
-		if _, err = db.Exec(`INSERT INTO likes (post_id,user_id,is_like,type) VALUES (?,?,?,'post')`, id, id_user, 1); err != nil {
+	if checkrow == 0 && is_like{
+			if _, err = db.Exec(`INSERT INTO likes (post_id,user_id,is_like,type) VALUES (?,?,?,'post')`, id, id_user, 1); err != nil {
+			fmt.Println(err.Error())
+			return err
+			}
+	}else if checkrow == 0 && !is_like {
+		if _, err = db.Exec(`INSERT INTO likes (post_id,user_id,is_like,type) VALUES (?,?,?,'post')`, id, id_user, 2); err != nil {
+			fmt.Println(err.Error())
+			return err
+			}
+
+	}else if checkrow != 0 && is_like {
+		var reaction int
+		pre,err := db.Prepare("SELECT is_like FROM likes WHERE post_id = ? AND user_id = ? ")
+		if err != nil {
 			fmt.Println(err.Error())
 			return err
 		}
+	defer pre.Close()
+	err = pre.QueryRow(id, id_user).Scan(&reaction)
+		if err != nil {
+   		fmt.Println(err.Error())
+    	return err
+		}
+	if _, err := db.Exec(`DELETE FROM Likes WHERE post_id = ? AND user_id = ? `, id, id_user); err != nil {
+		fmt.Println(err.Error())
+		return err
+	}
+	if reaction == 2 {
+		if _, err = db.Exec(`INSERT INTO likes (post_id,user_id,is_like,type) VALUES (?,?,?,'post')`, id, id_user, 1); err != nil {
+			fmt.Println(err.Error())
+			return err
+			}
+	}
 
+	}else if checkrow != 0 && !is_like {
+	
+		var reaction int
+		pre,err := db.Prepare("SELECT is_like FROM likes WHERE post_id = ? AND user_id = ? ")
+	if err != nil {
+		fmt.Println(err.Error())
+		return err
+	}
+	defer pre.Close()
+	err = pre.QueryRow(id, id_user).Scan(&reaction)
+if err != nil {
+    fmt.Println(err.Error())
+    return err
+}
+	if _, err := db.Exec(`DELETE FROM Likes WHERE post_id = ? AND user_id = ? `, id, id_user); err != nil {
+		fmt.Println(err.Error())
+		return err
+		}
+	if reaction == 1 {
+		if _, err = db.Exec(`INSERT INTO likes (post_id,user_id,is_like,type) VALUES (?,?,?,'post')`, id, id_user, 2); err != nil {
+			fmt.Println(err.Error())
+			return err
+		}
+	}
 	}
 	return nil
 }

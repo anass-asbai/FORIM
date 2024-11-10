@@ -80,6 +80,7 @@ func Like_post(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	http.Redirect(w,r,"/post",http.StatusSeeOther)
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {

@@ -149,17 +149,22 @@
 </head>
 <body>
     <form action="/post" method="post">
-        <label for="category">Select Category:</label>
-        <select id="category" name="category" >
-            <option value="" disabled selected>All</option>
-            <option value="news">News</option>
-            <option value="tech">Technology</option>
-            <option value="lifestyle">Lifestyle</option>
-            <option value="education">Education</option>
-            <option value="health">Health</option>
-            <option value="entertainment">Entertainment</option>
-        </select>
-        <button>Filter</button>
+  <label>Select Categories:</label>
+  <div>
+    <input type="checkbox" id="news" name="category" value="news">
+    <label for="news">News</label>
+    <input type="checkbox" id="tech" name="category" value="tech">
+    <label for="tech">Technology</label>
+    <input type="checkbox" id="lifestyle" name="category" value="lifestyle">
+    <label for="lifestyle">Lifestyle</label>
+    <input type="checkbox" id="education" name="category" value="education">
+    <label for="education">Education</label>
+    <input type="checkbox" id="health" name="category" value="health">
+    <label for="health">Health</label>
+    <input type="checkbox" id="entertainment" name="category" value="entertainment">
+    <label for="entertainment">Entertainment</label>
+       </div>
+             <button>Filter</button>
     </form>
     <button onclick="deleteCookie()">logout</button>
     <form action="/post/create" method="post">

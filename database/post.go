@@ -95,7 +95,7 @@ GROUP BY
 	if catigorie != "" {
 		query += " WHERE category = ?"
 	}
-	query += " ORDER BY posts.createdAt DESC LIMIT 1 OFFSET " + strconv.Itoa(limit)
+	query += " ORDER BY posts.createdAt DESC LIMIT 5 OFFSET " + strconv.Itoa(limit)
 	rows, err := db.Query(query, catigorie)
 	if err != nil {
 		return nil, err

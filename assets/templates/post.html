@@ -179,6 +179,9 @@
                 <h1>{{ .Title }}</h1>
                 <div class="category">Category: {{ .Category }}</div>
                 <h3>{{ .Content }}</h3>
+               {{ if gt (len .Content) 30 }}
+                 <button class="more-button">more</button>
+                 {{ end }}
                 <div>{{ .Date }}</div>
                 <div class="interaction-section">
                     <div>
@@ -214,5 +217,6 @@ function deleteCookie() {
     document.cookie = `session=; expires=Thu, 01 Jan 2000 00:00:00 UTC;`;
     window.location.href = "/"; 
 }
+const button = document.querySelector("a")
 </script>
 </html>

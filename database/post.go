@@ -2,6 +2,7 @@ package database
 
 import (
 	"fmt"
+	"strconv"
 	"time"
 )
 
@@ -42,13 +43,36 @@ func InsertPost(title, content, email, categories string) error {
 }
 
 /*
-func InsertComment(comment,email string) error{
-	id := 0
-	erre := db.QueryRow("SELECT FROM users WHERE email = ?",email).Scan(&id)
-	return err
-}*/
+	func InsertComment(comment,email string) error{
+		id := 0
+		erre := db.QueryRow("SELECT FROM users WHERE email = ?",email).Scan(&id)
+		return err
+	}
+*/
 
-func GetPosts(catigorie string) ([]Post, error) {
+func CountPost(limit int) bool {
+	var l string
+	err := db.QueryRow("SELECT COUNT(post_id) FROM posts").Scan(&l)
+	if err != nil {
+		fmt.Println("Error querying row:", err)
+		return false
+	}
+	fmt.Println(l)
+
+	max, err := strconv.Atoi(l)
+	if err != nil {
+		fmt.Println("Error converting count to integer:", err)
+		return false
+	}
+
+	return max > limit
+}
+
+func GetPosts(catigorie string, limit int) ([]Post, error) {
+
+	if limit < 0 {
+		limit = 0
+	}
 	var query string
 	query = `SELECT 
     posts.post_id,
@@ -71,7 +95,7 @@ GROUP BY
 	if catigorie != "" {
 		query += " WHERE category = ?"
 	}
-	query += " ORDER BY posts.createdAt DESC;"
+	query += " ORDER BY posts.createdAt DESC LIMIT 1 OFFSET " + strconv.Itoa(limit)
 	rows, err := db.Query(query, catigorie)
 	if err != nil {
 		return nil, err

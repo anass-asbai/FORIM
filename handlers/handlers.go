@@ -1,15 +1,27 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 
 	"forim/bcryptp"
 	"forim/database"
 )
 
+var limit = 0
+
 func GetHome(w http.ResponseWriter, r *http.Request) {
 	catigorie := r.FormValue("category")
-	posts, err := database.GetPosts(catigorie)
+	action := r.FormValue("Next")
+	if action != "" && database.CountPost(limit+1) {
+		limit += 1
+	}
+	fmt.Print(database.CountPost(limit + 1))
+	action = r.FormValue("Back")
+	if action != "" && limit != 0 {
+		limit -= 1
+	}
+	posts, err := database.GetPosts(catigorie, limit)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -35,6 +47,7 @@ func GetHome(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+
 	RenderTemplate(w, "./assets/templates/post.html", posts)
 }
 
@@ -43,14 +56,6 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 		title := r.FormValue("title")
 		content := r.FormValue("content")
 		category := r.FormValue("category")
-		if len(title) < 5 || len(title) > 50 {
-			http.Error(w, "title is too long or too short", http.StatusBadRequest)
-			return
-		}
-		if len(content) < 10 || len(content) > 500 {
-			http.Error(w, "content is too long or too short", http.StatusBadRequest)
-			return
-		}
 
 		cookie, err := r.Cookie("session")
 		if err != nil {
@@ -58,6 +63,14 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if title != "" && content != "" && category != "" {
+			if len(title) < 5 || len(title) > 50 {
+				http.Error(w, "title is too long or too short", http.StatusBadRequest)
+				return
+			}
+			if len(content) < 10 || len(content) > 500 {
+				http.Error(w, "content is too long or too short", http.StatusBadRequest)
+				return
+			}
 			if err := database.InsertPost(title, content, cookie.Value, category); err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
@@ -111,6 +124,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	email := r.FormValue("email")
 	password := r.FormValue("password")
 	doz, err := database.GetLogin(email, password)
+
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -118,7 +132,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	if doz == true {
 		catigorie := r.FormValue("category")
-		posts, err := database.GetPosts(catigorie)
+		posts, err := database.GetPosts(catigorie, 0)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

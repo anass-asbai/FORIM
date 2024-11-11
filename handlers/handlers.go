@@ -16,6 +16,10 @@ func GetHome(w http.ResponseWriter, r *http.Request) {
 	}
 	id_post := r.FormValue("id-post")
 	comment := r.FormValue("comment")
+	if len(comment) > 200 {
+		http.Error(w, "comment is too long", http.StatusBadRequest)
+		return
+	}
 	cookie, err := r.Cookie("session")
 	if err != nil {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
@@ -39,6 +43,14 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 		title := r.FormValue("title")
 		content := r.FormValue("content")
 		category := r.FormValue("category")
+		if len(title) < 5 || len(title) > 50 {
+			http.Error(w, "title is too long or too short", http.StatusBadRequest)
+			return
+		}
+		if len(content) < 10 || len(content) > 500 {
+			http.Error(w, "content is too long or too short", http.StatusBadRequest)
+			return
+		}
 
 		cookie, err := r.Cookie("session")
 		if err != nil {
@@ -79,18 +91,18 @@ func Like_post(w http.ResponseWriter, r *http.Request) {
 	if like != "" {
 		err = database.InsertLike(like, cookie.Value, true)
 		if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	}else {
-		err = database.InsertLike(deslike, cookie.Value,false)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	} else {
+		err = database.InsertLike(deslike, cookie.Value, false)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 	}
 
-	http.Redirect(w,r,"/post",http.StatusSeeOther)
+	http.Redirect(w, r, "/post", http.StatusSeeOther)
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {

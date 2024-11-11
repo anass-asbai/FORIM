@@ -16,7 +16,7 @@ func main() {
 	defer database.CloseDB()
 
 	srv := http.Server{
-		Addr:    ":8081",
+		Addr:    ":8080",
 		Handler: routes(),
 	}
 	log.Println("Listening on port 8080")

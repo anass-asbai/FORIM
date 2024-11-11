@@ -11,6 +11,8 @@
         <h1>{{ .User }}</h1>
         <h3>{{ .Comment }}</h3>   
     </li>
+         <button class="like-comment-btn" name="like_post" value="{{ .ID }}">Like</button>
+        <button class="like-comment-btn" name="deslike_post" value="{{ .ID }}">Deslike</button>
     {{ end }}
 </body>
 </html>

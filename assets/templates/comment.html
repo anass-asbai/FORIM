@@ -12,7 +12,9 @@
         <h3>{{ .Comment }}</h3>   
     </li>
          <button class="like-comment-btn" name="like_post" value="{{ .ID }}">Like</button>
-        <button class="like-comment-btn" name="deslike_post" value="{{ .ID }}">Deslike</button>
+        <button class="like-comment-btn" name="deslike_post" value="{{ .ID }}">Deslike</button><br>
+        <span class="like-count">0 Likes</span>
+        <span class="like-count">0 desLikes</span>
     {{ end }}
 </body>
 </html>

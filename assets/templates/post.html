@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -219,4 +219,130 @@ function deleteCookie() {
 }
 const button = document.querySelector("a")
 </script>
+</html> -->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/templates/styles/post.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Forum</title>
+</head>
+
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="#" class="logo">Logo</a>
+            <nav class="nav-links">
+                <a href="#">Home</a>
+                <a href="#">About</a>
+                <a href="#">Contact</a>
+                <a href="#">Profile</a>
+            </nav>
+            <div class="search-box">
+                <input type="text" placeholder="Search...">
+            </div>
+        </div>
+    </header>
+    <div class="content-spacer"></div>
+
+    
+    <div class="forum-container">
+        <aside class="sidebar-left">
+            <h2>Categories</h2>
+            <ul>
+                <li>All</li>
+                <li>Technology</li>
+                <li>Lifestyle</li>
+                <li>Health</li>
+                <li>Sports</li>
+                <li>Travel</li>
+            </ul>
+        </aside>
+
+        <main class="posts-container">
+            <button onclick="deleteCookie()">logout</button>
+            <form action="/post/create" method="post">
+                <button>Create Post</button>
+            </form>
+            <h1>Posts</h1>
+            <ul>
+                {{ range . }}
+                <li class="post-item">
+                    <div class="username">{{ .User }}</div>
+                    <h3>{{ .Title }}</h3>
+                 <div class="category">Category: {{ .Category }}</div>
+                    <p>{{ .Content }}</p>
+                    {{ if gt (len .Content) 30 }}
+                    <button class="more-button">more</button>
+                    {{ end }}
+                    <div class="post-date">{{ .Date }}</div>
+            
+                    <div class="interaction-section">
+                        <div class="interaction-section">
+                            <!-- <button class="like-comment-btn">
+                                <i class="fas fa-thumbs-up"></i>
+                                <span class="like-count">{{ .Like }} Likes</span>
+                            </button> -->
+                            <form action="/like_post" method="post">
+                                <button class="like-comment-btn" name="like_post" value="{{ .ID }}">
+                                    <i class="fas fa-thumbs-up"></i>
+                                    {{ .Like }}
+                                </button>
+                                <button class="dislike-comment-btn" name="deslike_post" value="{{ .ID }}">
+                                    <i class="fas fa-thumbs-down"></i>
+                                    {{ .Deslike }}
+                                </button>
+                            </form>
+                            
+                            
+                            <!-- <span class="like-count">{{ .Like }} Likes</span>
+                        <span class="like-count">{{ .Deslike }} Deslike</span> 
+                            <button class="dislike-comment-btn">
+                                <i class="fas fa-thumbs-down"></i>
+                                <span class="dislike-count">{{ 123 }} Dislikes</span>
+                            </button> -->
+                            <form action="/comment" method="post">
+                                <button class="like-comment-btn" name="id-post" value="{{ .ID }}">Show all Comment</button>
+                            </form>
+                        </div>
+                    </div>
+                    <form class="comment-form" action="/post" method="post">
+                        <input type="text" name="comment" placeholder="Add a comment..." required>
+                        <button type="submit" value="{{ .ID }}" name="id-post">
+                            <i class="fas fa-comment"></i> <!-- Font Awesome Comment Icon -->
+                        </button>
+                    </form>
+                    
+                </li>
+                {{ end }}
+            </ul>
+            <form action="/post" method="post">
+                <button name="Back" value="Back">Back</button>
+                <button name="Next" value="Next">NEXT</button>
+            </form>
+        </main>
+
+        <!-- <aside class="sidebar-right">
+            <h2>About This Forum</h2>
+            <p>Welcome to our community forum! Here, you can connect with others, share insights, and participate in
+                discussions across various topics. We're glad to have you here.</p>
+            <p>Browse through different categories, like posts, leave comments, and stay engaged!</p>
+        </aside> -->
+    </div>
+</body>
+<script>
+    function deleteCookie() {
+        document.cookie = `session=; expires=Thu, 01 Jan 2000 00:00:00 UTC;`;
+        window.location.href = "/"; 
+    }
+    const button = document.querySelector("a")
+    </script>
+    
+
 </html>

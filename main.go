@@ -27,6 +27,7 @@ func main() {
 
 func routes() http.Handler {
 	mux := http.NewServeMux()
+	mux.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
 	mux.HandleFunc("/", handlers.Login)
 	mux.HandleFunc("/register", handlers.Register)
 	mux.HandleFunc("/post", handlers.GetHome)

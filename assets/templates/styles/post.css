@@ -57,25 +57,21 @@ body {
     width: 200px;
 }
 
+/* Container holding sidebar and main content */
 .forum-container {
-    /* display: grid; */
-    /* grid-template-columns: 1fr 300px; Exclude left sidebar space */
-    display: grid;
-
-    grid-template-columns: 250px 1fr;
-    height: 100vh;/* Offset by sidebar width + padding */
-    /* gap: 2rem; */
+    display: flex;
 }
 
+/* Sidebar styling */
 .sidebar-left {
-    height: 100vh; /* Keeps sidebar height full without fixing position */
-    width: 250px;
-    margin-top: -5px;
-    background: linear-gradient(180deg, #EBF8FF 0%, #F0F9FF 100%);
-    padding: 1.5rem;
-    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
-    overflow-y: hidden; /* Prevents internal scrolling */
+    position: fixed;
+    height: 85vh; /* Full viewport height */
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto; /* Allow scrolling within sidebar if needed */
 }
+
+
 .sidebar-left h2 {
     color: #2563EB;
     font-size: 20px;
@@ -99,10 +95,11 @@ body {
 }
 
 .posts-container {
-    margin-left: 70px; /* Creates space for sidebar */
-    padding: 1.5rem;
-    height: 100vh; /* Ensures full height for scrolling */
+    margin-left: 250px; /* Offset main content to avoid overlap with sidebar */
+    padding: 20px; /* Optional padding for readability */
+    flex: 1;
 }
+
 
 .posts-container h1 {
     color: #2563EB;
@@ -435,4 +432,45 @@ form .button-wrapper button:hover {
 
 .more-button:hover {
     background-color: #1D4ED8;
+}
+
+.footer {
+    background: #F0F9FF;
+    padding: 1rem;
+    text-align: center;
+    font-size: 14px;
+    color: #6B7280;
+    /* position: fixed; */
+    bottom: 0;
+    width: 100%;
+}
+
+
+.pagination-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.pagination-buttons button {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff; /* Text color */
+    background-color: #3498db; /* Button background color */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 25%;
+    margin-right: 40%;
+}
+
+.pagination-buttons button:hover {
+    background-color: #2980b9; /* Darker shade on hover */
+}
+
+.pagination-buttons button:active {
+    background-color: #1c6693; /* Even darker shade for active state */
 }

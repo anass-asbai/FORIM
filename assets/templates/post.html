@@ -1,228 +1,3 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Posts</title>
-    <style>
-        /* Resetting default margin and padding */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
-        /* Styling the body */
-        body {
-            background-color: #f0f0f0;
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-
-        /* Styling the form and button */
-        form {
-            margin-bottom: 20px;
-        }
-
-        button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        /* Styling headers */
-        h1 {
-            font-size: 24px;
-            margin: 10px 0;
-            color: #333;
-        }
-
-        h1:first-of-type {
-            font-size: 32px;
-            color: #007bff;
-        }
-
-        /* Styling post titles */
-        h3 {
-            font-size: 18px;
-            color: #555;
-            margin-bottom: 5px;
-        }
-
-        /* Styling the list */
-        ul {
-            list-style: none;
-            width: 100%;
-            max-width: 600px;
-        }
-
-        li {
-            background-color: white;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            font-size: 14px;
-            color: #777;
-            position: relative;
-        }
-
-        /* Styling comments and likes section */
-        .interaction-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 10px;
-        }
-
-        .like-comment-btn {
-            background-color: #f0f0f0;
-            border: none;
-            cursor: pointer;
-            color: #007bff;
-            font-size: 14px;
-            margin-right: 10px;
-        }
-
-        .like-comment-btn:hover {
-            text-decoration: underline;
-        }
-
-        .like-count, .comment-count {
-            font-size: 12px;
-            color: #777;
-        }
-
-        /* Comment form styling */
-        .comment-form {
-            display: flex;
-            margin-top: 10px;
-        }
-
-        .comment-form input[type="text"] {
-            flex: 1;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-right: 5px;
-        }
-
-        .comment-form button {
-            padding: 8px 12px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .comment-form button:hover {
-            background-color: #0056b3;
-        }
-
-        /* Styling for username */
-        .username {
-            font-weight: bold;
-            color: #007bff;
-            margin-bottom: 5px;
-        }
-
-        /* Styling for category */
-        .category {
-            font-size: 12px;
-            color: #555;
-            margin-bottom: 5px;
-        }
-    </style>
-</head>
-<body>
-    <form action="/post" method="post">
-       <label>Select Categories:</label>
-  <div>
-    <input type="checkbox" id="news" name="category" value="news">
-    <label for="news">News</label>
-    <input type="checkbox" id="tech" name="category" value="tech">
-    <label for="tech">Technology</label>
-    <input type="checkbox" id="lifestyle" name="category" value="lifestyle">
-    <label for="lifestyle">Lifestyle</label>
-    <input type="checkbox" id="education" name="category" value="education">
-    <label for="education">Education</label>
-    <input type="checkbox" id="health" name="category" value="health">
-    <label for="health">Health</label>
-    <input type="checkbox" id="entertainment" name="category" value="entertainment">
-    <label for="entertainment">Entertainment</label>
-       </div>
-        <button>Filter</button>
-    </form>
-    <button onclick="deleteCookie()">logout</button>
-    <form action="/post/create" method="post">
-       
-        <button>Create Post</button>
-    </form>
-    <h1>Posts</h1>
-    <ul>
-        {{ range . }}
-            <li>
-                <div class="username">{{ .User }}</div> 
-                <h1>{{ .Title }}</h1>
-                <div class="category">Category: {{ .Category }}</div>
-                <h3>{{ .Content }}</h3>
-               {{ if gt (len .Content) 30 }}
-                 <button class="more-button">more</button>
-                 {{ end }}
-                <div>{{ .Date }}</div>
-                <div class="interaction-section">
-                    <div>
-                        <form action="/like_post" method="post">
-                            <button class="like-comment-btn" name="like_post" value="{{ .ID }}">Like</button>
-                            <button class="like-comment-btn" name="deslike_post" value="{{ .ID }}">Deslike</button>
-                        </form>
-                        <span class="like-count">{{ .Like }} Likes</span>
-                        <span class="like-count">{{ .Deslike }} Deslike</span>
-                    </div>
-                    <div>
-                        <form action="/comment" method="post">
-                            <button class="like-comment-btn" name="id-post" value="{{ .ID }}">Comment</button>
-                        </form>
-                    </div>
-                </div>
-
-                <form class="comment-form" action="/post" method="post">
-                    <input type="text" name="comment" placeholder="Add a comment..." required>
-                    <button type="submit" value="{{ .ID }}" name="id-post">Comment</button>
-                </form>
-            </li>
-        {{ end }}
-    </ul>
-    <form action="/post" method="post">
-    
-        <button name="Next" value="Next">NEXT</button>
-        <button name="Back" value="Back">Back</button>
-    </form>
-</body>
-<script>
-function deleteCookie() {
-    document.cookie = `session=; expires=Thu, 01 Jan 2000 00:00:00 UTC;`;
-    window.location.href = "/"; 
-}
-const button = document.querySelector("a")
-</script>
-</html> -->
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -248,10 +23,11 @@ const button = document.querySelector("a")
                 <input type="text" placeholder="Search...">
             </div>
         </div>
+        </div>
     </header>
     <div class="content-spacer"></div>
 
-    
+
     <div class="forum-container">
         <aside class="sidebar-left">
             <h2>Categories</h2>
@@ -263,32 +39,42 @@ const button = document.querySelector("a")
                 <li>Sports</li>
                 <li>Travel</li>
             </ul>
+            <div class="logout-container">
+                <button class="logout-button" onclick="deleteCookie()">
+                    <i class="fas fa-sign-out-alt"></i> logout
+                </button>
+            </div>
+
         </aside>
 
         <main class="posts-container">
-            <button onclick="deleteCookie()">logout</button>
             <form action="/post/create" method="post">
-                <button>Create Post</button>
+                <!-- Wrapper for the button -->
+                <div class="button-wrapper">
+                    <button type="submit">
+                        <i class="fas fa-plus-circle"></i> Create Post
+                    </button>
+                </div>
             </form>
+
             <h1>Posts</h1>
             <ul>
                 {{ range . }}
                 <li class="post-item">
                     <div class="username">{{ .User }}</div>
                     <h3>{{ .Title }}</h3>
-                 <div class="category">Category: {{ .Category }}</div>
-                    <p>{{ .Content }}</p>
+                    <div class="category">Category: {{ .Category }}</div>
+                    <p class="content-preview">{{ .Content }}</p>
+
                     {{ if gt (len .Content) 30 }}
-                    <button class="more-button">more</button>
+                    <button class="more-button" onclick="toggleContent(this)">Show More</button>
+                    <p class="content-full" style="display:none;">{{ .Content }}</p>
+
                     {{ end }}
                     <div class="post-date">{{ .Date }}</div>
-            
+
                     <div class="interaction-section">
                         <div class="interaction-section">
-                            <!-- <button class="like-comment-btn">
-                                <i class="fas fa-thumbs-up"></i>
-                                <span class="like-count">{{ .Like }} Likes</span>
-                            </button> -->
                             <form action="/like_post" method="post">
                                 <button class="like-comment-btn" name="like_post" value="{{ .ID }}">
                                     <i class="fas fa-thumbs-up"></i>
@@ -299,16 +85,9 @@ const button = document.querySelector("a")
                                     {{ .Deslike }}
                                 </button>
                             </form>
-                            
-                            
-                            <!-- <span class="like-count">{{ .Like }} Likes</span>
-                        <span class="like-count">{{ .Deslike }} Deslike</span> 
-                            <button class="dislike-comment-btn">
-                                <i class="fas fa-thumbs-down"></i>
-                                <span class="dislike-count">{{ 123 }} Dislikes</span>
-                            </button> -->
                             <form action="/comment" method="post">
-                                <button class="like-comment-btn" name="id-post" value="{{ .ID }}">Show all Comment</button>
+                                <button class="like-comment-btn" name="id-post" value="{{ .ID }}">Show all
+                                    Comment</button>
                             </form>
                         </div>
                     </div>
@@ -318,7 +97,7 @@ const button = document.querySelector("a")
                             <i class="fas fa-comment"></i> <!-- Font Awesome Comment Icon -->
                         </button>
                     </form>
-                    
+
                 </li>
                 {{ end }}
             </ul>
@@ -327,22 +106,14 @@ const button = document.querySelector("a")
                 <button name="Next" value="Next">NEXT</button>
             </form>
         </main>
-
-        <!-- <aside class="sidebar-right">
-            <h2>About This Forum</h2>
-            <p>Welcome to our community forum! Here, you can connect with others, share insights, and participate in
-                discussions across various topics. We're glad to have you here.</p>
-            <p>Browse through different categories, like posts, leave comments, and stay engaged!</p>
-        </aside> -->
     </div>
 </body>
 <script>
     function deleteCookie() {
         document.cookie = `session=; expires=Thu, 01 Jan 2000 00:00:00 UTC;`;
-        window.location.href = "/"; 
+        window.location.href = "/";
     }
     const button = document.querySelector("a")
-    </script>
-    
+</script>
 
 </html>

@@ -35,7 +35,7 @@ func InsertPost(title, content, email, categories string) error {
 	erre := db.QueryRow("SELECT user_id FROM users WHERE email = ?", email).Scan(&id)
 	_ = erre
 	erre = db.QueryRow("SELECT category_id FROM categories WHERE name = ?", categories).Scan(&category_id)
-	fmt.Println(categories)
+	// fmt.Println(categories)
 	_ = erre
 	_, err := db.Exec("INSERT INTO posts (title, content, createdAt,user_id, category_id) VALUES (?, ?, datetime('now'),?,?)", title, content, id, category_id)
 	return err
@@ -56,7 +56,7 @@ func CountPost(limit int) bool {
 		fmt.Println("Error querying row:", err)
 		return false
 	}
-	fmt.Println(l)
+	// fmt.Println(l)
 
 	max, err := strconv.Atoi(l)
 	if err != nil {
@@ -149,7 +149,7 @@ if err := rows1.Scan( &post.Title, &post.Content, &post.Date, &post.User ,&post.
 	return nil, err
 }
 }
-fmt.Println(post)
+// fmt.Println(post)
 	var Comments []Comment
 	for rows.Next() {
 		var Comment Comment

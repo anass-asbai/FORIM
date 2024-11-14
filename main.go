@@ -16,10 +16,10 @@ func main() {
 	defer database.CloseDB()
 
 	srv := http.Server{
-		Addr:    ":9999",
+		Addr:    ":8080",
 		Handler: routes(),
 	}
-	log.Println("Listening on port 9999")
+	log.Println("Listening on port 8080")
 	if err := srv.ListenAndServe(); err != nil {
 		log.Println(err)
 	}
@@ -34,5 +34,8 @@ func routes() http.Handler {
 	mux.HandleFunc("/comment", handlers.GetComment)
 	mux.HandleFunc("/post/create", handlers.CreatePost)
 	mux.HandleFunc("/like_post", handlers.Like_post)
+
+
+	mux.HandleFunc("/newcomment",handlers.NewComment)
 	return mux
 }

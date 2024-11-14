@@ -26,27 +26,6 @@ func GetHome(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	id_post := r.FormValue("id-post")
-	comment := r.FormValue("comment")
-	if len(comment) > 200 {
-		http.Error(w, "comment is too long", http.StatusBadRequest)
-		return
-	}
-	cookie, err := r.Cookie("session")
-	if err != nil {
-		http.Redirect(w, r, "/", http.StatusSeeOther)
-		return
-	}
-	if cookie == nil {
-		http.Redirect(w, r, "/", http.StatusSeeOther)
-		return
-	}
-	if comment != "" {
-		if err := database.Createcomment(comment, id_post, cookie.Value); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-	}
 
 	RenderTemplate(w, "./assets/templates/post.html", posts)
 }
@@ -90,8 +69,37 @@ func GetComment(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	fmt.Println(comments)
+	fmt.Println("comments : ", comments)
 	RenderTemplate(w, "./assets/templates/comment.html", comments)
+}
+
+func NewComment(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+		return
+	}
+	id_post := r.FormValue("id-post")
+	comment := r.FormValue("comment")
+	if len(comment) > 200 {
+		http.Error(w, "comment is too long", http.StatusBadRequest)
+		return
+	}
+	cookie, err := r.Cookie("session")
+	if err != nil {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+	if cookie == nil {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+	if comment != "" {
+		if err := database.Createcomment(comment, id_post, cookie.Value); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+	http.Redirect(w, r, "/post", http.StatusSeeOther)
 }
 
 func Like_post(w http.ResponseWriter, r *http.Request) {
@@ -125,7 +133,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	email := r.FormValue("email")
 	password := r.FormValue("password")
 	doz, err := database.GetLogin(email, password)
-
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

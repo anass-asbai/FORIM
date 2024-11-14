@@ -16,10 +16,10 @@ func main() {
 	defer database.CloseDB()
 
 	srv := http.Server{
-		Addr:    ":8080",
+		Addr:    ":9999",
 		Handler: routes(),
 	}
-	log.Println("Listening on port 8080")
+	log.Println("Listening on port 9999")
 	if err := srv.ListenAndServe(); err != nil {
 		log.Println(err)
 	}

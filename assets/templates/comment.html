@@ -5,49 +5,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/assets/templates/styles/comments.css">
+    <link rel="stylesheet" href="/assets/templates/styles/post.css">
     <title>Comments</title>
 
 </head>
 
 <body>
+    <header class="header">
+        <div class="header-content">
+            <a href="#" class="logo">Logo</a>
+            <nav class="nav-links">
+                <a href="http://localhost:8080/post">Home</a>
+                <a href="#">About</a>
+                <a href="#">Contact</a>
+                <a href="#">Profile</a>
+            </nav>
+            <div class="search-box">
+                <input type="text" placeholder="Search...">
+            </div>
+        </div>
+        </div>
+    </header>
+    <h1>{{ .Title }}</h1>
+    <div class="post-content">
+        <div class="username">{{ .User }}</div>
+        <div class="category">Category: {{ .Category }}</div>
+        <p>{{ .Content }}</p>
+        {{ if gt (len .Content) 30 }}
+            <button class="more-button">more</button>
+        {{ end }}
+        <div class="post-date">{{ .Date }}</div>
+    </div>
 
-    <h1>Comments</h1>
+    <h2>Comments</h2>
     <ul>
-        {{ range . }}
-        <li>
-            <!-- Circle with initial -->
+        {{ if lt (len .Comm) 1 }}
+        <h1> no Comments</h1>
+        {{ else }}
+        {{ range .Comm }}
+        <li class="comment-item">
             <div class="initial-circle">{{ .User | printf "%.1s" }}</div>
-
-            <!-- Comment content (username and text) -->
             <div class="comment-content">
-                <h1>{{ .User }}</h1>
-                <h3>{{ .Comment }}</h3>
+                <h3>{{ .User }}</h3>
+                <p>{{ .Comment }}</p>
             </div>
         </li>
         {{ end }}
+        {{end}}
     </ul>
 </body>
 
 </html>
-
-
-<!-- <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Test</h1>
-    {{ range . }}
-    <li>
-        <h1>{{ .User }}</h1>
-        <h3>{{ .Comment }}</h3>   
-    </li>
-         <button class="like-comment-btn" name="like_post" value="{{ .ID }}">Like</button>
-        <button class="like-comment-btn" name="deslike_post" value="{{ .ID }}">Deslike</button><br>
-        <span class="like-count">0 Likes</span>
-        <span class="like-count">0 desLikes</span>
-    {{ end }}
-</body>
-</html> -->

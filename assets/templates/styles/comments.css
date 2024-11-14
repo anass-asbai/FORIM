@@ -1,83 +1,96 @@
-/* Resetting default margin and padding */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* Update the background, text, and button colors according to your color palette */
+body {
+    background-color: #f5f5f5; /* Replace with your palette's background color */
+    color: #333; /* Replace with your primary text color */
     font-family: Arial, sans-serif;
 }
 
-/* Styling the body */
-body {
-    /* background-image: url('/assets/templates/n2.png');
-    background-attachment: fixed;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat; */
-    background: linear-gradient(180deg, #EBF8FF 0%, #F0F9FF 100%);
-    color: #333;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+/* Title and Header Styling */
+h1, h2 {
+    color: #444; /* Primary title color */
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+/* Post Content Styling */
+.post-content {
+    background-color: #ffffff; /* Background for post container */
+    border-radius: 8px;
     padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    margin-top: 70px;
+    /* max-width: 700px; */
+    width: 80%;
 }
 
-/* Title styling */
-h1 {
-    font-size: 32px;
-    color: #007bff;
-    margin-bottom: 20px;
+.username {
+    font-weight: bold;
+    color: #007acc; /* Color for username text */
 }
 
-/* Comment list styling */
-ul {
-    width: 100%;
-    max-width: 600px;
+.category, .post-date {
+    font-size: 0.9em;
+    color: #888; /* Subdued color for date and category */
 }
 
-/* Individual comment styling */
-li {
-    list-style: none;
-    background-color: #f8f9fa;
-    border-radius: 5px;
-    padding: 10px;
-    margin-bottom: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+/* More Button Styling */
+.more-button {
+    display: inline-block;
+    padding: 8px 16px;
+    margin-top: 10px;
+    background-color: #007acc; /* Primary button color */
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.more-button:hover {
+    background-color: #005fa3; /* Darker shade for hover */
+}
+
+/* Comment Section Styling */
+.comment-item {
     display: flex;
     align-items: center;
-    gap: 10px;
+    background-color: #f9f9f9; /* Background for each comment */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 10px auto;
+    max-width: 600px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Circle with initial styling */
 .initial-circle {
     width: 40px;
     height: 40px;
-    background-color: #007bff;
-    border-radius: 50%;
+    background-color: #007acc; /* Background color for initial circle */
+    color: #ffffff;
+    font-size: 1.2em;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #fff;
-    font-size: 18px;
-    font-weight: bold;
+    border-radius: 50%;
+    margin-right: 15px;
 }
 
-/* Username styling */
-.comment-content h1 {
-    font-size: 18px;
-    font-weight: bold;
-    color: #007bff;
-    margin-bottom: 3px;
-}
-
-/* Comment text styling */
 .comment-content h3 {
-    font-size: 16px;
-    color: #555;
-    font-weight: normal;
     margin: 0;
+    color: #333;
+    font-weight: bold;
 }
 
-/* Comment content styling */
-.comment-content {
-    flex: 1;
+.comment-content p {
+    margin: 5px 0 0;
+    color: #555; /* Comment text color */
+}
+
+/* No Comments Styling */
+h1.no-comments {
+    text-align: center;
+    color: #888;
+    font-size: 1.2em;
 }

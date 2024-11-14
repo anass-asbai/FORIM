@@ -1,3 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/templates/styles/comments.css">
+    <title>Comments</title>
+
+</head>
+
+<body>
+
+    <h1>Comments</h1>
+    <ul>
+        {{ range . }}
+        <li>
+            <!-- Circle with initial -->
+            <div class="initial-circle">{{ .User | printf "%.1s" }}</div>
+
+            <!-- Comment content (username and text) -->
+            <div class="comment-content">
+                <h1>{{ .User }}</h1>
+                <h3>{{ .Comment }}</h3>
+            </div>
+        </li>
+        {{ end }}
+    </ul>
+</body>
+
+</html>
+
+
 <!-- <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -18,34 +51,3 @@
     {{ end }}
 </body>
 </html> -->
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/assets/templates/styles/comments.css">
-    <title>Comments</title>
-
-</head>
-
-<body>
-    <h1>Comments</h1>
-    <ul>
-        {{ range . }}
-        <li>
-            <!-- Circle with initial -->
-            <div class="initial-circle">{{ .User | printf "%.1s" }}</div>
-
-            <!-- Comment content (username and text) -->
-            <div class="comment-content">
-                <h1>{{ .User }}</h1>
-                <h3>{{ .Comment }}</h3>
-            </div>
-        </li>
-        {{ end }}
-    </ul>
-</body>
-
-</html>

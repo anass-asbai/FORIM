@@ -23,32 +23,38 @@ type Comment struct {
 	User    string
 }
 
-func InsertPost(title, content, email, categories string) error {
-	/* if(len(content)> 500){
+func InsertPost(title, content, email string, categories []string) error {
+	user_id := 0
 
-		return <max len error>
-
+	erre := db.QueryRow("SELECT user_id FROM users WHERE email = ?", email).Scan(&user_id)
+	if erre != nil {
+		return erre
 	}
-	*/
 
-	id := 0
-	category_id := 0
-	erre := db.QueryRow("SELECT user_id FROM users WHERE email = ?", email).Scan(&id)
-	_ = erre
-	erre = db.QueryRow("SELECT category_id FROM categories WHERE name = ?", categories).Scan(&category_id)
-	fmt.Println(categories)
-	_ = erre
-	_, err := db.Exec("INSERT INTO posts (title, content, createdAt,user_id, category_id) VALUES (?, ?, datetime('now'),?,?)", title, content, id, category_id)
-	return err
-}
-
-/*
-	func InsertComment(comment,email string) error{
-		id := 0
-		erre := db.QueryRow("SELECT FROM users WHERE email = ?",email).Scan(&id)
+	result, err := db.Exec("INSERT INTO posts (title, content, createdAt, user_id) VALUES (?, ?, datetime('now'), ?)", title, content, user_id)
+	if err != nil {
 		return err
 	}
-*/
+
+	idPost, err := result.LastInsertId()
+	if err != nil {
+		return err
+	}
+
+	for _, category := range categories {
+		category_id := 0
+		err := db.QueryRow("SELECT category_id FROM categories WHERE name = ?", category).Scan(&category_id)
+		if err != nil {
+			return err
+		}
+		_, err = db.Exec("INSERT INTO posts_categories (post_id, category_id) VALUES (?, ?)", idPost, category_id)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
 
 func CountPost(limit int) bool {
 	var l string
@@ -57,7 +63,6 @@ func CountPost(limit int) bool {
 		fmt.Println("Error querying row:", err)
 		return false
 	}
-	fmt.Println(l)
 
 	max, err := strconv.Atoi(l)
 	if err != nil {
@@ -78,18 +83,19 @@ func GetPosts(catigorie string, limit int) ([]Post, error) {
     posts.post_id,
     posts.title,
     posts.content,
-    posts.createdAt, 
+    posts.createdAt,
+    GROUP_CONCAT(COALESCE(categories.name,'')) AS category_name,
     COALESCE(users.name, '') AS username,
-    categories.name AS category,
     COALESCE(SUM(CASE WHEN likes.is_like = 1 THEN 1 ELSE 0 END), 0) AS like_count,
     COALESCE(SUM(CASE WHEN likes.is_like = 2 THEN 1 ELSE 0 END), 0) AS dislike_count
 FROM 
     posts
 LEFT JOIN users ON users.user_id = posts.user_id
-LEFT JOIN categories ON categories.category_id = posts.category_id
 LEFT JOIN likes ON likes.post_id = posts.post_id
+LEFT JOIN posts_categories ON posts_categories.post_id = posts.post_id
+LEFT JOIN categories ON categories.category_id = posts_categories.category_id
 GROUP BY 
-    posts.post_id, posts.title, posts.content, posts.createdAt, users.name, categories.name
+    posts.post_id
 `
 
 	if catigorie != "" {
@@ -104,25 +110,9 @@ GROUP BY
 	var posts []Post
 	for rows.Next() {
 		var post Post
-		if err := rows.Scan(&post.ID, &post.Title, &post.Content, &post.Date, &post.User, &post.Category, &post.Like, &post.Deslike); err != nil {
+		if err := rows.Scan(&post.ID, &post.Title, &post.Content, &post.Date, &post.Category, &post.User, &post.Like, &post.Deslike); err != nil {
 			return nil, err
 		}
-		/*rows1, err := db.Query(`SELECT COUNT(likes.post_id) FROM likes WHERE likes.post_id = ? AND is_like = 1`, post.ID)
-		if err != nil {
-			return nil, err
-		}
-		defer rows1.Close()
-		if rows1.Next() {
-			rows1.Scan(&post.Like)
-		}
-			rows2, err := db.Query(`SELECT COUNT(likes.post_id) FROM likes WHERE likes.post_id = ? AND is_like = 2`, post.ID)
-		if err != nil {
-			return nil, err
-		}
-		defer rows2.Close()
-		if rows2.Next() {
-			rows2.Scan(&post.Deslike)
-		}*/
 
 		posts = append(posts, post)
 	}

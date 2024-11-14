@@ -16,7 +16,6 @@ func GetHome(w http.ResponseWriter, r *http.Request) {
 	if action != "" && database.CountPost(limit+1) {
 		limit += 1
 	}
-	fmt.Print(database.CountPost(limit + 1))
 	action = r.FormValue("Back")
 	if action != "" && limit != 0 {
 		limit -= 1
@@ -55,14 +54,15 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodPost {
 		title := r.FormValue("title")
 		content := r.FormValue("content")
-		category := r.FormValue("category")
+		categories := r.Form["category"]
 
+		fmt.Println(categories)
 		cookie, err := r.Cookie("session")
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		if title != "" && content != "" && category != "" {
+		if title != "" && content != "" {
 			if len(title) < 5 || len(title) > 50 {
 				http.Error(w, "title is too long or too short", http.StatusBadRequest)
 				return
@@ -71,7 +71,7 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 				http.Error(w, "content is too long or too short", http.StatusBadRequest)
 				return
 			}
-			if err := database.InsertPost(title, content, cookie.Value, category); err != nil {
+			if err := database.InsertPost(title, content, cookie.Value, categories); err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}

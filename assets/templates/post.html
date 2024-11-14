@@ -276,7 +276,7 @@ const button = document.querySelector("a")
                 <li class="post-item">
                     <div class="username">{{ .User }}</div>
                     <h3>{{ .Title }}</h3>
-                 <div class="category">Category: {{ .Category }}</div>
+                    <p>{{ .Category}}</p>
                     <p>{{ .Content }}</p>
                     {{ if gt (len .Content) 30 }}
                     <button class="more-button">more</button>

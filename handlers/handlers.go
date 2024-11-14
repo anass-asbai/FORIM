@@ -16,7 +16,7 @@ func GetHome(w http.ResponseWriter, r *http.Request) {
 	if action != "" && database.CountPost(limit+1) {
 		limit += 1
 	}
-	fmt.Print(database.CountPost(limit + 1))
+	
 	action = r.FormValue("Back")
 	if action != "" && limit != 0 {
 		limit -= 1
@@ -32,16 +32,13 @@ func GetHome(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "comment is too long", http.StatusBadRequest)
 		return
 	}
-	cookie, err := r.Cookie("session")
-	if err != nil {
-		http.Redirect(w, r, "/", http.StatusSeeOther)
-		return
-	}
-	if cookie == nil {
-		http.Redirect(w, r, "/", http.StatusSeeOther)
-		return
-	}
+
 	if comment != "" {
+		cookie, err := r.Cookie("session")
+		if err != nil {
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
+			return
+		}
 		if err := database.Createcomment(comment, id_post, cookie.Value); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -59,7 +56,7 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 
 		cookie, err := r.Cookie("session")
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
 			return
 		}
 		if title != "" && content != "" && category != "" {
@@ -75,7 +72,7 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
-			http.Redirect(w, r, "/post", http.StatusSeeOther)
+			http.Redirect(w, r, "/", http.StatusSeeOther)
 			return
 		}
 	}
@@ -96,18 +93,24 @@ func GetComment(w http.ResponseWriter, r *http.Request) {
 func Like_post(w http.ResponseWriter, r *http.Request) {
 	like := r.FormValue("like_post")
 	deslike := r.FormValue("deslike_post")
-	cookie, err := r.Cookie("session")
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+
 	if like != "" {
+		cookie, err := r.Cookie("session")
+		if err != nil {
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
+			return
+		}
 		err = database.InsertLike(like, cookie.Value, true)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 	} else {
+		cookie, err := r.Cookie("session")
+		if err != nil {
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
+			return
+		}
 		err = database.InsertLike(deslike, cookie.Value, false)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -115,7 +118,7 @@ func Like_post(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	http.Redirect(w, r, "/post", http.StatusSeeOther)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
@@ -129,8 +132,9 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	fmt.Println("=",password,"=",email,"=",doz)
 
-	if doz == true {
+	if doz  {
 		catigorie := r.FormValue("category")
 		posts, err := database.GetPosts(catigorie, 0)
 		if err != nil {
@@ -143,6 +147,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			Value: email,
 		}
 		http.SetCookie(w, &cookie)
+		fmt.Println("----",cookie)
 		RenderTemplate(w, "./assets/templates/post.html", posts)
 	} else {
 		errorMessage := ""
@@ -171,7 +176,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		http.Redirect(w, r, "/", http.StatusSeeOther)
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
 	} else {
 		RenderTemplate(w, "./assets/templates/register.html", nil)
 	}

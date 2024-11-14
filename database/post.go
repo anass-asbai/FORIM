@@ -15,10 +15,9 @@ type Post struct {
 	Deslike  int
 	User     string
 	Category string
+	Comm []Comment
 }
 type Comment struct {
-	ID      int
-	PostID  int
 	Comment string
 	User    string
 }
@@ -129,23 +128,38 @@ GROUP BY
 	return posts, nil
 }
 
-func GetComment(id string) ([]Comment, error) {
+func GetComment(id string) (any, error) {
 	rows, err := db.Query(`SELECT content, users.name FROM comments LEFT Join users ON users.user_id=comments.user_id WHERE  post_id = ?`, id)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
+rows1, err := db.Query(`SELECT posts.title, posts.content, posts.createdAt, users.name ,categories.name AS category_name
+                    FROM posts 
+                    LEFT JOIN users ON posts.user_id = users.user_id 
+					LEFT JOIN categories ON categories.category_id = posts.category_id
+                    WHERE posts.post_id = ?`, id)
+if err != nil {
+	return nil, err
+}
+defer rows1.Close()
+var post Post
+if rows1.Next(){
+if err := rows1.Scan( &post.Title, &post.Content, &post.Date, &post.User ,&post.Category); err != nil {
+	return nil, err
+}
+}
+fmt.Println(post)
 	var Comments []Comment
 	for rows.Next() {
-
 		var Comment Comment
 		if err := rows.Scan(&Comment.Comment, &Comment.User); err != nil {
 			return nil, err
 		}
-
 		Comments = append(Comments, Comment)
 	}
-	return Comments, nil
+	post.Comm = Comments
+	return post, nil
 }
 
 func InsertLike(id, email string, is_like bool) error {

@@ -90,6 +90,7 @@ func GetComment(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	fmt.Println(comments)
 	RenderTemplate(w, "./assets/templates/comment.html", comments)
 }
 

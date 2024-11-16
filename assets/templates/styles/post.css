@@ -57,43 +57,21 @@ body {
     width: 200px;
 }
 
-/* .forum-container {
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 0 1rem;
-    display: grid;
-    grid-template-columns: 250px 1fr 300px;
-    gap: 2rem;
-} */
-
-
+/* Container holding sidebar and main content */
 .forum-container {
-    /* display: grid; */
-    /* grid-template-columns: 1fr 300px; Exclude left sidebar space */
-    display: grid;
-
-    grid-template-columns: 250px 1fr;
-    height: 100vh;/* Offset by sidebar width + padding */
-    /* gap: 2rem; */
+    display: flex;
 }
 
-/* .sidebar-left {
-    background: white;
-    padding: 1.5rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    height: fit-content;
-} */
-
+/* Sidebar styling */
 .sidebar-left {
-    height: 100vh; /* Keeps sidebar height full without fixing position */
-    width: 250px;
-    margin-top: -5px;
-    background: linear-gradient(180deg, #EBF8FF 0%, #F0F9FF 100%);
-    padding: 1.5rem;
-    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
-    overflow-y: hidden; /* Prevents internal scrolling */
+    position: fixed;
+    height: 85vh; /* Full viewport height */
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto; /* Allow scrolling within sidebar if needed */
 }
+
+
 .sidebar-left h2 {
     color: #2563EB;
     font-size: 20px;
@@ -117,11 +95,11 @@ body {
 }
 
 .posts-container {
-    margin-left: 70px; /* Creates space for sidebar */
-    padding: 1.5rem;
-    overflow-y: auto; /* Allows only main content to scroll */
-    height: 100vh; /* Ensures full height for scrolling */
+    margin-left: 250px; /* Offset main content to avoid overlap with sidebar */
+    padding: 20px; /* Optional padding for readability */
+    flex: 1;
 }
+
 
 .posts-container h1 {
     color: #2563EB;
@@ -242,27 +220,6 @@ form {
     background-color: #1D4ED8;
 }
 
-/* .sidebar-right {
-    background: white;
-    padding: 1.5rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    height: fit-content;
-}
-
-.sidebar-right h2 {
-    color: #2563EB;
-    font-size: 20px;
-    margin-bottom: 1rem;
-}
-
-.sidebar-right p {
-    color: #374151;
-    font-size: 14px;
-    line-height: 1.5;
-    margin-bottom: 1rem;
-} */
-
 form[action="/post/create"] button {
     background-color: #2563EB;
     color: white;
@@ -274,14 +231,22 @@ form[action="/post/create"] button {
     cursor: pointer;
     transition: background-color 0.3s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    float: right;
     margin-bottom: 1rem;
-    margin-right: 300px;
+    margin-right: 0; /* Ensure margin-right is 0 to keep it aligned to the right */
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* Adds space between the icon and text */
+    float: right; /* This aligns the button to the right */
+}
+
+form[action="/post/create"] button i {
+    font-size: 20px; /* Adjust the size of the icon */
 }
 
 form[action="/post/create"] button:hover {
     background-color: #1D4ED8;
 }
+
 .post-item p {
     font-family: math;
     font-size: 17px;
@@ -380,4 +345,132 @@ form[action="/post/create"] button:hover {
 .content-spacer {
     height: 72px;
     /* Matches header height */
+}
+
+.logout-container {
+    position: absolute;  /* Take it out of the flow and position it relative to the sidebar */
+    bottom: 20px;         /* Distance from the bottom of the sidebar */
+    left: 20px;           /* Distance from the left of the sidebar */
+    width: auto;          /* Ensure the width is auto so it fits the button */
+}
+
+.logout-button {
+    display: flex;
+    align-items: center;
+    padding: 9px 9px;
+    font-size: 16px;
+    background-color: #2563EB;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.logout-button:hover {
+    transform: scale(1.05); /* Slight scale on hover */
+}
+
+.logout-button i {
+    margin-right: 8px; /* Space between the icon and the text */
+    font-size: 18px; /* Icon size */
+}
+
+.logout-button:focus {
+    outline: none; /* Remove outline on focus */
+}
+
+
+/* Wrapper for the button to align it right */
+form .button-wrapper {
+    width: 81%; /* Ensure the wrapper takes the full width of the form */
+    text-align: right; /* Aligns the button to the right */
+}
+
+/* Button styling */
+form .button-wrapper button {
+    background-color: #2563EB;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: inline-flex; /* Ensure the icon and text align properly */
+    align-items: center;
+    gap: 0.5rem; /* Space between icon and text */
+}
+
+form .button-wrapper button i {
+    font-size: 20px; /* Adjust the size of the icon */
+}
+
+form .button-wrapper button:hover {
+    background-color: #1D4ED8;
+}
+
+
+/* Initially hide the full content */
+.content-full {
+    display: none;
+}
+
+/* Optional: Style for the button */
+.more-button {
+    background-color: #2563EB;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.more-button:hover {
+    background-color: #1D4ED8;
+}
+
+.footer {
+    background: #F0F9FF;
+    padding: 1rem;
+    text-align: center;
+    font-size: 14px;
+    color: #6B7280;
+    /* position: fixed; */
+    bottom: 0;
+    width: 100%;
+}
+
+
+.pagination-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.pagination-buttons button {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff; /* Text color */
+    background-color: #3498db; /* Button background color */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 25%;
+    margin-right: 40%;
+}
+
+.pagination-buttons button:hover {
+    background-color: #2980b9; /* Darker shade on hover */
+}
+
+.pagination-buttons button:active {
+    background-color: #1c6693; /* Even darker shade for active state */
 }

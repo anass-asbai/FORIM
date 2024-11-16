@@ -14,12 +14,12 @@ func GetHome(w http.ResponseWriter, r *http.Request) {
 	catigorie := r.FormValue("category")
 	action := r.FormValue("Next")
 	if action != "" && database.CountPost(limit+1) {
-		limit += 1
+		limit += 5
 	}
 	
 	action = r.FormValue("Back")
 	if action != "" && limit != 0 {
-		limit -= 1
+		limit -= 5
 	}
 	posts, err := database.GetPosts(catigorie, limit)
 	if err != nil {

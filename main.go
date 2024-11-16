@@ -28,13 +28,12 @@ func main() {
 func routes() http.Handler {
 	mux := http.NewServeMux()
 	mux.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
-	mux.HandleFunc("/", handlers.Login)
+	mux.HandleFunc("/login", handlers.Login)
 	mux.HandleFunc("/register", handlers.Register)
-	mux.HandleFunc("/post", handlers.GetHome)
+	mux.HandleFunc("/", handlers.GetHome)
 	mux.HandleFunc("/comment", handlers.GetComment)
-	mux.HandleFunc("/post/create", handlers.CreatePost)
+	mux.HandleFunc("/create", handlers.CreatePost)
 	mux.HandleFunc("/like_post", handlers.Like_post)
-
 
 	mux.HandleFunc("/newcomment",handlers.NewComment)
 	return mux

@@ -56,7 +56,6 @@ func CountPost(limit int) bool {
 		fmt.Println("Error querying row:", err)
 		return false
 	}
-	// fmt.Println(l)
 
 	max, err := strconv.Atoi(l)
 	if err != nil {

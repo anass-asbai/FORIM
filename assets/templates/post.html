@@ -48,7 +48,7 @@
         </aside>
 
         <main class="posts-container">
-            <form action="/post/create" method="post">
+            <form action="/create" method="post">
                 <!-- Wrapper for the button -->
                 <div class="button-wrapper">
                     <button type="submit">
@@ -101,7 +101,7 @@
                 </li>
                 {{ end }}
             </ul>
-            <form action="/post" method="post" class="pagination-buttons">
+            <form action="/" method="post" class="pagination-buttons">
                 <button name="Back" value="Back">Back</button>
                 <button name="Next" value="Next">Next</button>
             </form>
@@ -115,7 +115,7 @@
 <script>
     function deleteCookie() {
         document.cookie = `session=; expires=Thu, 01 Jan 2000 00:00:00 UTC;`;
-        window.location.href = "/";
+        window.location.href = "/login";
     }
     const button = document.querySelector("a")
 </script>

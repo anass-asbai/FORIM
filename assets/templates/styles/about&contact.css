@@ -1,0 +1,156 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa; /* Light grey background */
+    color: #343a40; /* Dark text color */
+}
+
+header {
+    background-color: #007bff; /* Blue header background */
+    color: #fff; /* White text */
+    padding: 20px;
+    text-align: center;
+}
+
+main {
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+
+/* About Us Page Styles */
+.about-section, 
+.team-section, 
+.contact-section {
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #ffffff; /* White cards */
+    border: 1px solid #dee2e6; /* Subtle border */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.about-section h2,
+.team-section h2,
+.contact-section h2 {
+    color: #007bff; /* Consistent heading color */
+    margin-bottom: 15px;
+}
+
+/* Contact Us Form Styles */
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="email"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: #f8f9fa; /* Light grey form inputs */
+}
+
+textarea {
+    resize: vertical;
+}
+
+button {
+    background-color: #007bff; /* Blue button */
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+
+.header {
+    background: linear-gradient(180deg, #EBF8FF 0%, #F0F9FF 100%);
+    padding: 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #0066FF;
+    text-decoration: none;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    margin-right: auto;
+    margin-left: 4rem;
+}
+
+.nav-links a {
+    color: #4A5568;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 0.5rem;
+}
+
+.nav-links a:hover {
+    color: #0066FF;
+}
+
+.search-box {
+    position: relative;
+}
+
+.search-box input {
+    padding: 0.5rem 1rem;
+    border: 1px solid #E2E8F0;
+    border-radius: 9999px;
+    width: 240px;
+    font-size: 14px;
+    color: #4A5568;
+    outline: none;
+}
+
+.search-box input::placeholder {
+    color: #A0AEC0;
+}
+
+.search-box input:focus {
+    border-color: #0066FF;
+    box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
+}
+
+.content-spacer {
+    height: 72px;
+    /* Matches header height */
+}

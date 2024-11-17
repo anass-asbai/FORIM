@@ -75,6 +75,7 @@ h1, h2 {
     justify-content: center;
     border-radius: 50%;
     margin-right: 15px;
+    margin-top: -65px;
 }
 
 .comment-content h3 {
@@ -93,4 +94,12 @@ h1.no-comments {
     text-align: center;
     color: #888;
     font-size: 1.2em;
+}
+
+
+p.comment {
+    font-size: 120%;
+    margin-bottom: 20px;
+
+
 }

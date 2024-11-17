@@ -168,11 +168,12 @@ form {
 
 .like-comment-btn {
     margin-right: 0.5rem;
+    /* margin-left: -3.5rem; */
     /* Small gap between Like and Dislike */
 }
 
 .dislike-comment-btn {
-    margin-left: 0;
+    margin-left: 30px;
     /* Remove any left margin */
 }
 
@@ -434,16 +435,6 @@ form .button-wrapper button:hover {
     background-color: #1D4ED8;
 }
 
-.footer {
-    background: #F0F9FF;
-    padding: 1rem;
-    text-align: center;
-    font-size: 14px;
-    color: #6B7280;
-    /* position: fixed; */
-    bottom: 0;
-    width: 100%;
-}
 
 
 .pagination-buttons {

@@ -21,7 +21,7 @@ body {
 .error-code {
     font-size: 100px;
     font-weight: bold;
-    color: #e74c3c; /* Primary color for error code */
+    color: #e74c3c; 
     margin-bottom: 20px;
 }
 
@@ -36,16 +36,16 @@ body {
     font-size: 16px;
     font-weight: bold;
     color: #ffffff;
-    background-color: #3498db; /* Button background color */
+    background-color: #3498db; 
     text-decoration: none;
     border-radius: 5px;
     transition: background-color 0.3s ease;
 }
 
 .error-button:hover {
-    background-color: #2980b9; /* Hover color */
+    background-color: #2980b9; 
 }
 
 .error-button:active {
-    background-color: #1c6693; /* Active color */
+    background-color: #1c6693; 
 }

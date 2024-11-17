@@ -57,12 +57,10 @@ body {
     width: 200px;
 }
 
-/* Container holding sidebar and main content */
 .forum-container {
     display: flex;
 }
 
-/* Sidebar styling */
 .sidebar-left {
     position: fixed;
     height: 85vh; /* Full viewport height */
@@ -95,8 +93,8 @@ body {
 }
 
 .posts-container {
-    margin-left: 250px; /* Offset main content to avoid overlap with sidebar */
-    padding: 20px; /* Optional padding for readability */
+    margin-left: 250px; 
+    padding: 20px; 
     flex: 1;
 }
 
@@ -143,7 +141,7 @@ body {
 }
 form {
     display: flex;
-    align-items: center; /* Vertically align the buttons */
+    align-items: center; 
 }
 
 .like-comment-btn,
@@ -157,7 +155,7 @@ form {
     font-size: 14px;
     display: flex;
     align-items: center;
-    gap: 0.3rem; /* Space between icon and count text */
+    gap: 0.3rem; 
     transition: background-color 0.3s ease;
 }
 
@@ -174,7 +172,6 @@ form {
 
 .dislike-comment-btn {
     margin-left: 30px;
-    /* Remove any left margin */
 }
 
 
@@ -215,7 +212,7 @@ form {
     transition: background-color 0.3s ease;
 }
 .comment-form button i {
-    font-size: 16px; /* Size of the icon */
+    font-size: 16px; 
 }
 .comment-form button:hover {
     background-color: #1D4ED8;
@@ -233,15 +230,15 @@ form[action="/post/create"] button {
     transition: background-color 0.3s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 1rem;
-    margin-right: 0; /* Ensure margin-right is 0 to keep it aligned to the right */
+    margin-right: 0;
     display: flex;
     align-items: center;
-    gap: 0.5rem; /* Adds space between the icon and text */
-    float: right; /* This aligns the button to the right */
+    gap: 0.5rem; 
+    float: right; 
 }
 
 form[action="/post/create"] button i {
-    font-size: 20px; /* Adjust the size of the icon */
+    font-size: 20px; 
 }
 
 form[action="/post/create"] button:hover {
@@ -251,13 +248,13 @@ form[action="/post/create"] button:hover {
 .post-item p {
     font-family: math;
     font-size: 17px;
-    color: #374151; /* Clear and readable color */
-    background-color: #F9FAFB; /* Subtle background for readability */
+    color: #374151; 
+    background-color: #F9FAFB; 
     padding: 0.5rem;
     border-radius: 4px;
     transition: background-color 0.3s ease, color 0.3s ease;
-    overflow-wrap: break-word; /* Ensures text wraps within the box */
-    max-width: 100%; /* Prevents content overflow */
+    overflow-wrap: break-word;
+    max-width: 100%; 
 }
 
 
@@ -342,17 +339,15 @@ form[action="/post/create"] button:hover {
     box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
 }
 
-/* Add spacing below header for content */
 .content-spacer {
     height: 72px;
-    /* Matches header height */
 }
 
 .logout-container {
-    position: absolute;  /* Take it out of the flow and position it relative to the sidebar */
-    bottom: 20px;         /* Distance from the bottom of the sidebar */
-    left: 20px;           /* Distance from the left of the sidebar */
-    width: auto;          /* Ensure the width is auto so it fits the button */
+    position: absolute;  
+    bottom: 20px;       
+    left: 20px;         
+    width: auto;         
 }
 
 .logout-button {
@@ -369,26 +364,24 @@ form[action="/post/create"] button:hover {
 }
 
 .logout-button:hover {
-    transform: scale(1.05); /* Slight scale on hover */
+    transform: scale(1.05); 
 }
 
 .logout-button i {
-    margin-right: 8px; /* Space between the icon and the text */
-    font-size: 18px; /* Icon size */
+    margin-right: 8px; 
+    font-size: 18px; 
 }
 
 .logout-button:focus {
-    outline: none; /* Remove outline on focus */
+    outline: none;
 }
 
 
-/* Wrapper for the button to align it right */
 form .button-wrapper {
-    width: 81%; /* Ensure the wrapper takes the full width of the form */
-    text-align: right; /* Aligns the button to the right */
+    width: 81%; 
+    text-align: right;
 }
 
-/* Button styling */
 form .button-wrapper button {
     background-color: #2563EB;
     color: white;
@@ -400,13 +393,13 @@ form .button-wrapper button {
     cursor: pointer;
     transition: background-color 0.3s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    display: inline-flex; /* Ensure the icon and text align properly */
+    display: inline-flex;
     align-items: center;
-    gap: 0.5rem; /* Space between icon and text */
+    gap: 0.5rem; 
 }
 
 form .button-wrapper button i {
-    font-size: 20px; /* Adjust the size of the icon */
+    font-size: 20px; 
 }
 
 form .button-wrapper button:hover {
@@ -419,7 +412,6 @@ form .button-wrapper button:hover {
     display: none;
 }
 
-/* Optional: Style for the button */
 .more-button {
     background-color: #2563EB;
     color: white;
@@ -448,8 +440,8 @@ form .button-wrapper button:hover {
     padding: 10px 20px;
     font-size: 16px;
     font-weight: bold;
-    color: #ffffff; /* Text color */
-    background-color: #3498db; /* Button background color */
+    color: #ffffff; 
+    background-color: #3498db;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -459,9 +451,9 @@ form .button-wrapper button:hover {
 }
 
 .pagination-buttons button:hover {
-    background-color: #2980b9; /* Darker shade on hover */
+    background-color: #2980b9;
 }
 
 .pagination-buttons button:active {
-    background-color: #1c6693; /* Even darker shade for active state */
+    background-color: #1c6693;
 }

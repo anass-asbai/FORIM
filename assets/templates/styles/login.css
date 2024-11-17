@@ -73,7 +73,6 @@ button:hover {
 .register-link {
     display: flex;
     justify-content: center;
-    /* Change to 'flex-start' for left or 'flex-end' for right */
     margin-top: auto;
     padding-top: 20px;
 }

@@ -20,12 +20,28 @@
             </nav>
          
         </div>
-        </div>
     </header>
     <div class="content-spacer"></div>
 
 
     <div class="forum-container">
+        <aside class="sidebar-left">
+            <h2>Categories</h2>
+            <ul>
+                <li>All</li>
+                <li>Technology</li>
+                <li>Lifestyle</li>
+                <li>Health</li>
+                <li>Sports</li>
+                <li>Travel</li>
+            </ul>
+            <div class="logout-container">
+                <button class="logout-button" onclick="deleteCookie()">
+                    <i class="fas fa-sign-out-alt"></i> logout
+                </button>
+            </div>
+
+        </aside>
 
         <main class="posts-container">
             <form action="/post/create" method="post">

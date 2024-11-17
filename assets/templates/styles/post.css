@@ -69,6 +69,15 @@ body {
     overflow-y: auto; /* Allow scrolling within sidebar if needed */
 }
 
+.sidebar-left ul li a {
+    text-decoration: none;
+    color: #333;
+    transition: color 0.3s;
+}
+.sidebar-left ul li a:hover {
+    color: #007BFF; /* Change color on hover */
+}
+
 
 .sidebar-left h2 {
     color: #2563EB;
@@ -77,6 +86,7 @@ body {
 }
 .sidebar-left ul {
     list-style: none;
+
 }
 
 .sidebar-left li {

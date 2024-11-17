@@ -1,20 +1,19 @@
-/* Update the background, text, and button colors according to your color palette */
 body {
-    background-color: #f5f5f5; /* Replace with your palette's background color */
-    color: #333; /* Replace with your primary text color */
+    background-color: #f5f5f5; 
+    /* background: linear-gradient(180deg, #EBF8FF 0%, #F0F9FF 100%); */
+
+    color: #333; 
     font-family: Arial, sans-serif;
 }
 
-/* Title and Header Styling */
 h1, h2 {
-    color: #444; /* Primary title color */
+    color: #444; 
     text-align: center;
     margin-bottom: 1rem;
 }
 
-/* Post Content Styling */
 .post-content {
-    background-color: #ffffff; /* Background for post container */
+    background-color: #ffffff; 
     border-radius: 8px;
     padding: 20px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
@@ -26,20 +25,19 @@ h1, h2 {
 
 .username {
     font-weight: bold;
-    color: #007acc; /* Color for username text */
+    color: #007acc; 
 }
 
 .category, .post-date {
     font-size: 0.9em;
-    color: #888; /* Subdued color for date and category */
+    color: #888; 
 }
 
-/* More Button Styling */
 .more-button {
     display: inline-block;
     padding: 8px 16px;
     margin-top: 10px;
-    background-color: #007acc; /* Primary button color */
+    background-color: #007acc; 
     color: #ffffff;
     border: none;
     border-radius: 4px;
@@ -48,14 +46,13 @@ h1, h2 {
 }
 
 .more-button:hover {
-    background-color: #005fa3; /* Darker shade for hover */
+    background-color: #005fa3; 
 }
 
-/* Comment Section Styling */
 .comment-item {
     display: flex;
     align-items: center;
-    background-color: #f9f9f9; /* Background for each comment */
+    background-color: #f9f9f9;
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 15px;
@@ -67,7 +64,7 @@ h1, h2 {
 .initial-circle {
     width: 40px;
     height: 40px;
-    background-color: #007acc; /* Background color for initial circle */
+    background-color: #007acc;
     color: #ffffff;
     font-size: 1.2em;
     display: flex;
@@ -75,6 +72,7 @@ h1, h2 {
     justify-content: center;
     border-radius: 50%;
     margin-right: 15px;
+    margin-top: -65px;
 }
 
 .comment-content h3 {
@@ -85,12 +83,19 @@ h1, h2 {
 
 .comment-content p {
     margin: 5px 0 0;
-    color: #555; /* Comment text color */
+    color: #555; 
 }
 
-/* No Comments Styling */
 h1.no-comments {
     text-align: center;
     color: #888;
     font-size: 1.2em;
+}
+
+
+p.comment {
+    font-size: 120%;
+    margin-bottom: 20px;
+
+
 }

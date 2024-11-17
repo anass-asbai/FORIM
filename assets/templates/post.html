@@ -12,17 +12,13 @@
 <body>
     <header class="header">
         <div class="header-content">
-            <a href="#" class="logo">Logo</a>
+            <a href="http://localhost:8080/post" class="logo">Logo</a>
             <nav class="nav-links">
-                <a href="http://localhost:8080">Home</a>
-                <a href="#">About</a>
-                <a href="#">Contact</a>
-                <a href="#">Profile</a>
+                <a href="http://localhost:8080/post">Home</a>
+                <a href="/assets/templates/about.html">About</a>
+                <a href="/assets/templates/contact.html">Contact</a>
             </nav>
-            <div class="search-box">
-                <input type="text" placeholder="Search...">
-            </div>
-        </div>
+         
         </div>
     </header>
     <div class="content-spacer"></div>
@@ -32,23 +28,29 @@
         <aside class="sidebar-left">
             <h2>Categories</h2>
             <ul>
-                <li>All</li>
-                <li>Technology</li>
-                <li>Lifestyle</li>
-                <li>Health</li>
-                <li>Sports</li>
-                <li>Travel</li>
+                <li><a href="/post?filter=all">All</a></li>
+                <li><a href="/post?filter=technology">Technology</a></li>
+                <li><a href="/post?filter=lifestyle">Lifestyle</a></li>
+                <li><a href="/post?filter=health">Health</a></li>
+                <li><a href="/post?filter=sports">Sports</a></li>
+                <li><a href="/post?filter=travel">Travel</a></li>
             </ul>
+        
+            <h2>Filter by</h2>
+            <ul>
+                <li><a href="/post?filter=created">My Created Posts</a></li>
+                <li><a href="/post?filter=liked">Liked Posts</a></li>
+            </ul>
+        
             <div class="logout-container">
                 <button class="logout-button" onclick="deleteCookie()">
                     <i class="fas fa-sign-out-alt"></i> logout
                 </button>
             </div>
-
         </aside>
-
+        
         <main class="posts-container">
-            <form action="/create" method="post">
+            <form action="/post/create" method="post">
                 <!-- Wrapper for the button -->
                 <div class="button-wrapper">
                     <button type="submit">
@@ -101,22 +103,20 @@
                 </li>
                 {{ end }}
             </ul>
-            <form action="/" method="post" class="pagination-buttons">
+            <form action="/post" method="post" class="pagination-buttons">
                 <button name="Back" value="Back">Back</button>
                 <button name="Next" value="Next">Next</button>
             </form>
         </main>
     </div>
-    <footer class="footer">
-        <p>&copy; 2024 Forum, Inc. All rights reserved.</p>
-    </footer>
 
 </body>
 <script>
     function deleteCookie() {
         document.cookie = `session=; expires=Thu, 01 Jan 2000 00:00:00 UTC;`;
-        window.location.href = "/login";
+        window.location.href = "/";
     }
+    const button = document.querySelector("a")
 </script>
 
 </html>

@@ -1,5 +1,4 @@
         body {
-            background-image: url("/assets/templates/n2.png");
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -83,7 +82,6 @@
         .register-link {
             display: flex;
             justify-content: center;
-            /* Change to 'flex-start' for left or 'flex-end' for right */
             margin-top: auto;
             padding-top: 20px;
         }

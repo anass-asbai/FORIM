@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/assets/templates/styles/comments.css">
     <link rel="stylesheet" href="/assets/templates/styles/post.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <title>Comments</title>
 
 </head>
@@ -13,17 +15,13 @@
 <body>
     <header class="header">
         <div class="header-content">
-            <a href="#" class="logo">Logo</a>
+            <a href="http://localhost:8080/post" class="logo">Logo</a>
             <nav class="nav-links">
-                <a href="http://localhost:8080">Home</a>
-                <a href="#">About</a>
-                <a href="#">Contact</a>
-                <a href="#">Profile</a>
+                <a href="http://localhost:8080/post">Home</a>
+                <a href="/assets/templates/about.html">About</a>
+                <a href="/assets/templates/contact.html">Contact</a>
             </nav>
-            <div class="search-box">
-                <input type="text" placeholder="Search...">
-            </div>
-        </div>
+
         </div>
     </header>
     <h1>{{ .Title }}</h1>
@@ -32,7 +30,7 @@
         <div class="category">Category: {{ .Category }}</div>
         <p>{{ .Content }}</p>
         {{ if gt (len .Content) 30 }}
-            <button class="more-button">more</button>
+        <button class="more-button">more</button>
         {{ end }}
         <div class="post-date">{{ .Date }}</div>
     </div>
@@ -47,18 +45,18 @@
             <div class="initial-circle">{{ .User | printf "%.1s" }}</div>
             <div class="comment-content">
                 <h3>{{ .User }}</h3>
-                <p>{{ .Comment }}</p>
+                <p class="comment">{{ .Comment }}</p>
+                <form action="/like_post" method="post">
+                    <button class="like-comment-btn" name="like_comment" value="{{ .Id_comment }}">
+                        <i class="fas fa-thumbs-up"></i>
+                        {{ .Like }}
+                    </button>
+                    <button class="dislike-comment-btn" name="deslike_comment" value="{{ .Id_comment }}">
+                        <i class="fas fa-thumbs-down"></i>
+                        {{ .Deslike }}
+                    </button>
+                </form>
             </div>
-            <form action="/like_post" method="post">
-                <button class="like-comment-btn" name="like_comment" value="{{ .Id_comment }}">
-                    <i class="fas fa-thumbs-up"></i>
-                    {{ .Like }}
-                </button>
-                <button class="dislike-comment-btn" name="deslike_comment" value="{{ .Id_comment }}">
-                    <i class="fas fa-thumbs-down"></i>
-                    {{ .Deslike }}
-                </button>
-            </form>
         </li>
         {{ end }}
         {{end}}

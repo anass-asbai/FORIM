@@ -55,7 +55,8 @@ func main() {
 		post_id INTEGER,
 		user_id INTEGER,
 		is_like INTEGER,
-		type TEXT,
+		comment_id INTEGER,
+		FOREIGN KEY (comment_id) REFERENCES comments(comment_id) ON DELETE CASCADE,
 		FOREIGN KEY (post_id) REFERENCES posts(post_id) ON DELETE CASCADE,
 		FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE  
 	);

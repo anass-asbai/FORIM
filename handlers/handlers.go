@@ -117,34 +117,65 @@ func NewComment(w http.ResponseWriter, r *http.Request) {
 }
 
 func Like_post(w http.ResponseWriter, r *http.Request) {
-	like := r.FormValue("like_post")
-	deslike := r.FormValue("deslike_post")
+	post_like := r.FormValue("like_post")
+	post_deslike := r.FormValue("deslike_post")
+	comment_like := r.FormValue("like_comment")
+	comment_deslike := r.FormValue("deslike_comment")
 
-	if like != "" {
+
+	if post_like != "" {
 		cookie, err := r.Cookie("session")
 		if err != nil {
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 			return
 		}
-		err = database.InsertLike(like, cookie.Value, true)
+		err = database.InsertLike(post_like, cookie.Value, true,true)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+	} else if post_deslike != "" {
+		cookie, err := r.Cookie("session")
+		if err != nil {
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
+			return
+		}
+		err = database.InsertLike(post_deslike, cookie.Value, false,true)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+	}else if comment_like != "" {
+		cookie, err := r.Cookie("session")
+		if err != nil {
+			http.Redirect(w, r, "/login", http.StatusSeeOther)
+			return
+		}
+		err = database.InsertLike(comment_like, cookie.Value, true,false)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		/*
+			hna 5aliwa trja3 lhome 7ta ndiro link fih query ikon fih id dyal post
+			bax wa9tama darna like irja3 lblasto fnafs lpost
+		*/
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 	} else {
 		cookie, err := r.Cookie("session")
 		if err != nil {
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 			return
 		}
-		err = database.InsertLike(deslike, cookie.Value, false)
+		err = database.InsertLike(comment_deslike, cookie.Value, false,false)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 	}
-
-	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {

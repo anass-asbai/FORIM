@@ -49,6 +49,16 @@
                 <h3>{{ .User }}</h3>
                 <p>{{ .Comment }}</p>
             </div>
+            <form action="/like_post" method="post">
+                <button class="like-comment-btn" name="like_comment" value="{{ .Id_comment }}">
+                    <i class="fas fa-thumbs-up"></i>
+                    {{ .Like }}
+                </button>
+                <button class="dislike-comment-btn" name="deslike_comment" value="{{ .Id_comment }}">
+                    <i class="fas fa-thumbs-down"></i>
+                    {{ .Deslike }}
+                </button>
+            </form>
         </li>
         {{ end }}
         {{end}}

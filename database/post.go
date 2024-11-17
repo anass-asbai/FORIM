@@ -121,7 +121,7 @@ func GetComment(id string) (any, error) {
     COALESCE(SUM(CASE WHEN l.is_like = 1 THEN 1 ELSE 0 END), 0) AS like_count,
     COALESCE(SUM(CASE WHEN l.is_like = 2 THEN 1 ELSE 0 END), 0) AS dislike_count
 FROM 
-    comments
+    comments c
 LEFT JOIN 
     likes l ON c.comment_id = l.comment_id
 WHERE 

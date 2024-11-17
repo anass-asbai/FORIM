@@ -5,7 +5,10 @@ import (
 	"strconv"
 	"time"
 )
-
+type Home struct{
+	Is_connect bool
+	Post []Post
+}
 type Post struct {
 	ID       int
 	Title    string
@@ -69,7 +72,7 @@ func CountPost(limit int) bool {
 	return max > limit
 }
 
-func GetPosts(catigorie string, limit int) ([]Post, error) {
+func GetPosts(catigorie string, limit int,cookie int) (Home, error) {
 
 	if limit < 0 {
 		limit = 0
@@ -99,18 +102,22 @@ GROUP BY
 	query += " ORDER BY posts.createdAt DESC LIMIT 5 OFFSET " + strconv.Itoa(limit)
 	rows, err := db.Query(query, catigorie)
 	if err != nil {
-		return nil, err
+		return Home{}, err
 	}
 	defer rows.Close()
 	var posts []Post
 	for rows.Next() {
 		var post Post
 		if err := rows.Scan(&post.ID, &post.Title, &post.Content, &post.Date, &post.User, &post.Category, &post.Like, &post.Deslike); err != nil {
-			return nil, err
+			return Home{}, err
 		}
 		posts = append(posts, post)
 	}
-	return posts, nil
+	home := Home{
+		Is_connect: cookie == 0,
+		Post:      posts,
+	}
+	return home, nil
 }
 
 func GetComment(id string) (any, error) {
@@ -240,6 +247,9 @@ func InsertLike(id, email string, is_like, is_post bool) error {
 		}
 	}
 }else {
+	/*
+		hna kayn lmoxkil dyal ila kant 
+	*/
 	pre, err := db.Prepare("SELECT COUNT(like_id) FROM likes WHERE comment_id = ? AND user_id = ? ")
 	if err != nil {
 		fmt.Println(err.Error())

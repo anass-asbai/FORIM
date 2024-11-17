@@ -21,11 +21,12 @@ func GetHome(w http.ResponseWriter, r *http.Request) {
 	if action != "" && limit != 0 {
 		limit -= 5
 	}
-	posts, err := database.GetPosts(catigorie, limit)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+	ch := 0
+	cookie, err := r.Cookie("session")
+		if err != nil {
+			ch = 1
+		}
+	posts, _ := database.GetPosts(catigorie, limit, ch)
 	id_post := r.FormValue("id-post")
 	comment := r.FormValue("comment")
 	if len(comment) > 200 {
@@ -34,17 +35,12 @@ func GetHome(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if comment != "" {
-		cookie, err := r.Cookie("session")
-		if err != nil {
-			http.Redirect(w, r, "/login", http.StatusSeeOther)
-			return
-		}
 		if err := database.Createcomment(comment, id_post, cookie.Value); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 	}
-
+	fmt.Println(posts)
 	RenderTemplate(w, "./assets/templates/post.html", posts)
 }
 
@@ -192,19 +188,20 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("=",password,"=",email,"=",doz)
 
 	if doz  {
-		catigorie := r.FormValue("category")
-		posts, err := database.GetPosts(catigorie, 0)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
 		cookie := http.Cookie{
 			Name:  "session",
 			Value: email,
 		}
 		http.SetCookie(w, &cookie)
-		fmt.Println("----",cookie)
+		catigorie := r.FormValue("category")
+		posts, err := database.GetPosts(catigorie, 0,0)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		
+		fmt.Println("----",cookie,"===",posts)
 		RenderTemplate(w, "./assets/templates/post.html", posts)
 	} else {
 		errorMessage := ""

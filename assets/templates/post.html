@@ -39,15 +39,23 @@
                 <li>Sports</li>
                 <li>Travel</li>
             </ul>
+            {{ if .Is_connect }}
             <div class="logout-container">
                 <button class="logout-button" onclick="deleteCookie()">
                     <i class="fas fa-sign-out-alt"></i> logout
                 </button>
             </div>
-
+            {{else}}
+            <div class="logout-container">
+                <button class="logout-button" onclick="window.location.href = '/login' " >
+                     <i class="fas fa-sign-out-alt"></i> login
+                </button>
+            </div>
+            {{end}}
         </aside>
 
         <main class="posts-container">
+            {{ if .Is_connect }}
             <form action="/create" method="post">
                 <!-- Wrapper for the button -->
                 <div class="button-wrapper">
@@ -56,10 +64,10 @@
                     </button>
                 </div>
             </form>
-
+            {{end }}
             <h1>Posts</h1>
             <ul>
-                {{ range . }}
+                {{ range .Post }}
                 <li class="post-item">
                     <div class="username">{{ .User }}</div>
                     <h3>{{ .Title }}</h3>

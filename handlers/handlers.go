@@ -40,7 +40,7 @@ func GetHome(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	fmt.Println(posts)
+	
 	RenderTemplate(w, "./assets/templates/post.html", posts)
 }
 
@@ -76,13 +76,13 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 	RenderTemplate(w, "./assets/templates/post.create.page.html", nil)
 }
 func GetComment(w http.ResponseWriter, r *http.Request) {
-	id_post := r.FormValue("id-post")
+	id_post := r.URL.Query().Get("id")
 	comments, err := database.GetComment(id_post)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	fmt.Println(comments)
+
 	RenderTemplate(w, "./assets/templates/comment.html", comments)
 }
 
@@ -117,7 +117,9 @@ func Like_post(w http.ResponseWriter, r *http.Request) {
 	post_deslike := r.FormValue("deslike_post")
 	comment_like := r.FormValue("like_comment")
 	comment_deslike := r.FormValue("deslike_comment")
+	id := r.URL.Query().Get("id")
 
+	fmt.Println("----",id)
 
 	if post_like != "" {
 		cookie, err := r.Cookie("session")
@@ -158,7 +160,7 @@ func Like_post(w http.ResponseWriter, r *http.Request) {
 			hna 5aliwa trja3 lhome 7ta ndiro link fih query ikon fih id dyal post
 			bax wa9tama darna like irja3 lblasto fnafs lpost
 		*/
-		http.Redirect(w, r, "/", http.StatusSeeOther)
+		http.Redirect(w, r, "/comment?id="+id, http.StatusSeeOther)
 	} else {
 		cookie, err := r.Cookie("session")
 		if err != nil {
@@ -170,7 +172,7 @@ func Like_post(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		http.Redirect(w, r, "/", http.StatusSeeOther)
+		http.Redirect(w, r, "/comment?id="+id, http.StatusSeeOther)
 	}
 }
 

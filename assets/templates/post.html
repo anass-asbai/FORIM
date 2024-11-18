@@ -93,7 +93,7 @@
                                     {{ .Deslike }}
                                 </button>
                             </form>
-                            <form action="/comment" method="post">
+                            <form action="/comment?id={{ .ID }}" method="post">
                                 <button class="like-comment-btn" name="id-post" value="{{ .ID }}">Show all
                                     Comment</button>
                             </form>

@@ -21,6 +21,7 @@ type Post struct {
 	Comm []Comment
 }
 type Comment struct {
+	ID       string
 	Id_comment int
 	Comment string
 	User    string
@@ -121,7 +122,6 @@ GROUP BY
 }
 
 func GetComment(id string) (any, error) {
-	fmt.Println(id)
 	rows, err := db.Query(`SELECT c.comment_id,
     c.content,
     c.post_id,
@@ -150,17 +150,17 @@ if err != nil {
 defer rows1.Close()
 var post Post
 if rows1.Next(){
-if err := rows1.Scan( &post.Title, &post.Content, &post.Date, &post.User ,&post.Category); err != nil {
+if err := rows1.Scan(&post.Title, &post.Content, &post.Date, &post.User ,&post.Category); err != nil {
 	return nil, err
 }
 }
-// fmt.Println(post)
 	var Comments []Comment
 	for rows.Next() {
 		var Comment Comment
 		if err := rows.Scan(&Comment.Id_comment,&Comment.Comment, &Comment.User,&Comment.Like,&Comment.Deslike); err != nil {
 			return nil, err
 		}
+		Comment.ID = id
 		Comments = append(Comments, Comment)
 	}
 	post.Comm = Comments
@@ -256,7 +256,6 @@ func InsertLike(id, email string, is_like, is_post bool) error {
 		return err
 	}
 	defer pre.Close()
-	fmt.Println(id)
 	err = pre.QueryRow(id, id_user).Scan(&checkrow)
 	if err != nil {
 		fmt.Println(err.Error())

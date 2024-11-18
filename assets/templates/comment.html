@@ -49,7 +49,7 @@
                 <h3>{{ .User }}</h3>
                 <p>{{ .Comment }}</p>
             </div>
-            <form action="/like_post" method="post">
+            <form action="/like_post?id={{ .ID }}" method="post">
                 <button class="like-comment-btn" name="like_comment" value="{{ .Id_comment }}">
                     <i class="fas fa-thumbs-up"></i>
                     {{ .Like }}
